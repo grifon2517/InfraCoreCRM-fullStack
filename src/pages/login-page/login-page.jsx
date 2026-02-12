@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 
 export function Login() {
 	const [login, setLogin] = useState('');
 	const [password, setPassword] = useState('');
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -11,6 +13,8 @@ export function Login() {
 			const res = await api.post('/auth/login', { login, password });
 			localStorage.setItem('token', res.data.token);
 			alert('Вход выполнен');
+			localStorage.setItem('token', res.data.token);
+			navigate('/products');
 		} catch (err) {
 			console.error(err);
 			alert('Ошибка входа');
