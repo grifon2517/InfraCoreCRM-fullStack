@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import { AdminPage, Login, ProductsPage, ProductPage } from './pages';
+import { AdminPage, Login, ProductsPage, ProductPage, ClaimsPage } from './pages';
 
 function Diplom() {
 	return (
@@ -13,7 +13,7 @@ function Diplom() {
 				<Route path="/register" element={<div>Страница регистрации</div>} />
 				<Route path="/products" element={<ProductsPage />} />
 				<Route path="/product/:id" element={<ProductPage />} />
-				<Route path="/claims" element={<div>Страница заказа</div>} />
+				<Route path="/claims" element={<ClaimsPage />} />
 				<Route path="/orders" element={<div>Страница заявок</div>} />
 				<Route path="/order/:id" element={<div>Страница заявки</div>} />
 				<Route path="/users" element={<div>Страница пользователей</div>} />

@@ -4,3 +4,4 @@ export * from './products-page/products-page';
 export * from './register-page/register-page';
 export * from './main-page/main-page';
 export * from './login-page/login-page';
+export * from './claims-page/claims-page.jsx';
