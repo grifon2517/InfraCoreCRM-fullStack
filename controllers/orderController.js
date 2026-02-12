@@ -25,12 +25,14 @@ exports.createOrder = async (req, res) => {
 
 exports.getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({
-      userId: req.user.userId,
-    }).populate("productId");
+    const orders = await Order.find({ userId: req.user.userId }).populate(
+      "productId",
+      "title description",
+    );
 
     res.json(orders);
-  } catch (e) {
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 };

@@ -16,6 +16,7 @@ const OrderSchema = new mongoose.Schema({
   comment: String,
   status: {
     type: String,
+    enum: ["new", "in_progress", "done", "rejected"],
     default: "new",
   },
   createdAt: {
