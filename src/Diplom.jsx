@@ -1,11 +1,24 @@
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchMe } from './store/authActions';
+
+import { Header } from './components/header';
 import { AdminPage, Login, ProductsPage, ProductPage, ClaimsPage, AdminOrdersPage } from './pages';
+import './App.css';
 
 function Diplom() {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			dispatch(fetchMe());
+		}
+	}, [dispatch]);
 	return (
 		<>
-			{/* <Header /> */}
+			<Header />
 			{/* <Content> */}
 			<Routes>
 				<Route path="/" element={<AdminPage />} />
