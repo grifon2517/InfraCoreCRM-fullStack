@@ -41,7 +41,9 @@ exports.login = async (req, res) => {
     // Проверяем пароль
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid login or password" });
+      return res.status(400).json({
+        message: "Неверный логин или пароль",
+      });
     }
 
     // Создаём JWT
