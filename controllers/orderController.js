@@ -1,23 +1,36 @@
+const mongoose = require("mongoose");
 const Order = require("../models/Order");
+const Product = require("../models/Product");
+const ApiError = require("../utils/api-error");
 
-exports.createOrder = async (req, res) => {
+exports.createOrder = async (req, res, next) => {
   try {
     const { productId, type, comment } = req.body;
 
-    // Проверка авторизации
+    // проверка авторизации
     if (!req.user || !req.user.userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return next(ApiError.unauthorized("Unauthorized"));
     }
 
-    // Валидация productId
+    // проверка productId
     if (!productId) {
-      return res.status(400).json({ message: "ProductId is required" });
+      return next(ApiError.badRequest("ProductId is required"));
     }
 
-    // Валидация типа
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return next(ApiError.badRequest("Invalid productId"));
+    }
+
+    // проверка существования продукта
+    const product = await Product.findById(productId);
+    if (!product) {
+      return next(ApiError.badRequest("Product not found"));
+    }
+
+    // проверка типа заявки
     const allowedTypes = ["repair", "diagnostic"];
     if (!allowedTypes.includes(type)) {
-      return res.status(400).json({ message: "Invalid order type" });
+      return next(ApiError.badRequest("Invalid order type"));
     }
 
     const order = new Order({
@@ -34,20 +47,22 @@ exports.createOrder = async (req, res) => {
       order,
     });
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: "Server error" });
+    next(ApiError.internal(e.message));
   }
 };
 
-exports.getMyOrders = async (req, res) => {
+exports.getMyOrders = async (req, res, next) => {
   try {
+    if (!req.user || !req.user.userId) {
+      return next(ApiError.unauthorized("Unauthorized"));
+    }
+
     const orders = await Order.find({ userId: req.user.userId })
       .populate("productId", "title description")
       .sort({ createdAt: -1 });
 
     res.json(orders);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    next(ApiError.internal(err.message));
   }
 };

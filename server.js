@@ -4,6 +4,7 @@ const cors = require("cors");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const errorMiddleware = require("./middleware/errorMiddleware");
 
 const adminRoutes = require("./routes/adminRoutes");
 require("dotenv").config();
@@ -15,7 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
-
+app.use(errorMiddleware);
 app.use("/api/admin", adminRoutes);
 
 mongoose

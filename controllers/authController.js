@@ -1,52 +1,80 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const ApiError = require("../utils/api-error");
 
-exports.register = async (req, res) => {
+// regex
+const LOGIN_REGEX = /^[a-zA-Z0-9_]+$/;
+
+// REGISTER
+exports.register = async (req, res, next) => {
   try {
-    const { login, password, role } = req.body;
+    const { login, password } = req.body;
 
+    // обязательные поля
+    if (!login || !password) {
+      throw ApiError.badRequest("Login and password are required");
+    }
+
+    // длина логина
+    if (login.length < 3 || login.length > 20) {
+      throw ApiError.badRequest("Login must be 3-20 characters");
+    }
+
+    // только латиница + цифры + _
+    if (!LOGIN_REGEX.test(login)) {
+      throw ApiError.badRequest(
+        "Login can contain only latin letters, numbers and underscore",
+      );
+    }
+
+    // длина пароля
+    if (password.length < 6) {
+      throw ApiError.badRequest("Password must be at least 6 characters");
+    }
+
+    // существует ли пользователь
     const existingUser = await User.findOne({ login });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      throw ApiError.badRequest("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // ВАЖНО: роль никогда не берём из req.body
     const user = new User({
       login,
       password: hashedPassword,
-      role: role || "user",
+      role: "user",
     });
 
     await user.save();
 
     res.json({ message: "User registered successfully" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    next(err);
   }
 };
 
-exports.login = async (req, res) => {
+// LOGIN
+exports.login = async (req, res, next) => {
   try {
     const { login, password } = req.body;
 
-    // Проверяем, есть ли пользователь
+    if (!login || !password) {
+      throw ApiError.badRequest("Login and password are required");
+    }
+
     const user = await User.findOne({ login });
     if (!user) {
-      return res.status(400).json({ message: "Invalid login or password" });
+      throw ApiError.badRequest("Invalid login or password");
     }
 
-    // Проверяем пароль
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({
-        message: "Неверный логин или пароль",
-      });
+      throw ApiError.badRequest("Invalid login or password");
     }
 
-    // Создаём JWT
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -63,7 +91,6 @@ exports.login = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    next(err);
   }
 };
