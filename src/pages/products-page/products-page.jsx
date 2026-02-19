@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import api from '../../api/api';
+import { ProductCard } from '../../components/products-card/products-card';
+import styles from './products-page.module.css';
 
 export function ProductsPage() {
 	const [products, setProducts] = useState([]);
@@ -19,17 +20,14 @@ export function ProductsPage() {
 	}, []);
 
 	return (
-		<div>
+		<div className={styles.wrapper}>
 			<h2>Моя продукция</h2>
 
-			{products.map((product) => (
-				<Link key={product._id} to={`/product/${product._id}`}>
-					<div>
-						<h3>{product.title}</h3>
-						<p>{product.description}</p>
-					</div>
-				</Link>
-			))}
+			<div className={styles.grid}>
+				{products.map((product) => (
+					<ProductCard key={product._id} product={product} />
+				))}
+			</div>
 		</div>
 	);
 }

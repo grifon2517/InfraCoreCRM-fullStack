@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../api/api';
+import styles from './product-page.module.css';
 
 export function ProductPage() {
 	const { id } = useParams();
@@ -8,12 +9,17 @@ export function ProductPage() {
 
 	const [product, setProduct] = useState(null);
 	const [type, setType] = useState(null);
+	const [email, setEmail] = useState('');
 	const [comment, setComment] = useState('');
+	const [errors, setErrors] = useState({});
+	const [success, setSuccess] = useState(false);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
 				const res = await api.get(`/products/${id}`);
+				console.log('Из API пришло:', res.data); // ← смотри сюда!
+				console.log('Путь к картинке:', res.data.image);
 				setProduct(res.data);
 			} catch (err) {
 				console.error(err);
@@ -23,9 +29,26 @@ export function ProductPage() {
 		fetchProduct();
 	}, [id]);
 
-	const handleCreateOrder = async () => {
+	const validate = () => {
+		const newErrors = {};
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		if (!emailRegex.test(email)) {
+			newErrors.email = 'Введите корректный email';
+		}
+
 		if (!type) {
-			alert('Выберите тип услуги');
+			newErrors.type = 'Выберите тип услуги';
+		}
+
+		return newErrors;
+	};
+
+	const handleCreateOrder = async () => {
+		const validationErrors = validate();
+
+		if (Object.keys(validationErrors).length > 0) {
+			setErrors(validationErrors);
 			return;
 		}
 
@@ -33,14 +56,20 @@ export function ProductPage() {
 			await api.post('/orders', {
 				productId: id,
 				type,
+				contactEmail: email,
 				comment,
 			});
 
-			alert('Заявка отправлена');
-			navigate('/claims');
+			setSuccess(true);
+			setErrors({});
+
+			// редирект после успешной отправки
+			setTimeout(() => {
+				navigate('/claims');
+			}, 1000);
 		} catch (err) {
 			console.error(err);
-			alert('Ошибка при создании заявки');
+			setErrors({ server: 'Ошибка при создании заявки' });
 		}
 	};
 
@@ -49,31 +78,48 @@ export function ProductPage() {
 	return (
 		<div>
 			<h2>{product.title}</h2>
-			<p>{product.description}</p>
 
-			<div>Тут будет картинка с устройством</div>
-
-			<div>
-				<p>тут будет описание и доп параметры</p>
-			</div>
-
-			<h3>Выберите услугу</h3>
-
-			<button onClick={() => setType('diagnostic')}>Провести диагностику</button>
-
-			<button onClick={() => setType('repair')}>Необходим ремонт</button>
-
-			<p>Выбрано: {type || 'не выбрано'}</p>
-
-			<div>
-				<textarea
-					placeholder="Уточнение к заявке"
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
+			<div className={styles.imageWrap}>
+				<img
+					src={product.image || '/placeholder.jpg'}
+					alt={product.title}
+					className={styles.image}
 				/>
 			</div>
 
-			<button onClick={handleCreateOrder}>Оформить заявку</button>
+			<p>{product.description}</p>
+
+			<h3>Выберите услугу</h3>
+
+			<button onClick={() => setType('Purchase')}>Купить оборудование</button>
+
+			<button onClick={() => setType('Rent')}>Арендовать оборудование</button>
+
+			{errors.type && <p style={{ color: 'red' }}>{errors.type}</p>}
+
+			<input
+				type="email"
+				placeholder="Email для связи"
+				value={email}
+				onChange={(e) => setEmail(e.target.value)}
+				style={{ display: 'block', marginTop: '15px' }}
+			/>
+
+			{errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+
+			<textarea
+				placeholder="Комментарий к заявке"
+				value={comment}
+				onChange={(e) => setComment(e.target.value)}
+				style={{ display: 'block', marginTop: '15px', width: '300px', height: '100px' }}
+			/>
+
+			<button onClick={handleCreateOrder} style={{ marginTop: '15px' }}>
+				Оформить заявку
+			</button>
+
+			{errors.server && <p style={{ color: 'red' }}>{errors.server}</p>}
+			{success && <p style={{ color: 'green' }}>Заявка отправлена</p>}
 		</div>
 	);
 }
