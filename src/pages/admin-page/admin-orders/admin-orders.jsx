@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../../api/admin';
+import { Loader } from '../../../components';
 
 export const AdminOrdersPage = () => {
 	const [orders, setOrders] = useState([]);
@@ -8,6 +9,7 @@ export const AdminOrdersPage = () => {
 
 	const fetchOrders = async () => {
 		try {
+			setLoading(true);
 			const res = await getAllOrders();
 			setOrders(res.data);
 		} catch (err) {
@@ -24,6 +26,7 @@ export const AdminOrdersPage = () => {
 
 	const handleStatusChange = async (id, status) => {
 		try {
+			setLoading(true);
 			const res = await updateOrderStatus(id, status);
 
 			setOrders((prev) =>
@@ -36,6 +39,8 @@ export const AdminOrdersPage = () => {
 		} catch (err) {
 			console.error(err);
 			toast.error('Ошибка обновления статуса');
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -43,6 +48,7 @@ export const AdminOrdersPage = () => {
 		if (!window.confirm('Удалить заявку?')) return;
 
 		try {
+			setLoading(true);
 			await deleteOrder(id);
 
 			setOrders((prev) => prev.filter((order) => order._id !== id));
@@ -51,11 +57,13 @@ export const AdminOrdersPage = () => {
 		} catch (err) {
 			console.error(err);
 			toast.error('Ошибка удаления');
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	if (loading) {
-		return <h2>Загрузка заявок...</h2>;
+		return <Loader />;
 	}
 
 	if (!orders.length) {

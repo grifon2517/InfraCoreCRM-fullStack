@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../api/api';
+import { Loader } from '../../components';
 import styles from './product-page.module.css';
 
 export function ProductPage() {
@@ -13,16 +14,19 @@ export function ProductPage() {
 	const [comment, setComment] = useState('');
 	const [errors, setErrors] = useState({});
 	const [success, setSuccess] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
+				setLoading(true);
 				const res = await api.get(`/products/${id}`);
-				console.log('Из API пришло:', res.data); // ← смотри сюда!
-				console.log('Путь к картинке:', res.data.image);
+
 				setProduct(res.data);
 			} catch (err) {
 				console.error(err);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -53,6 +57,7 @@ export function ProductPage() {
 		}
 
 		try {
+			setLoading(true);
 			await api.post('/orders', {
 				productId: id,
 				type,
@@ -63,17 +68,18 @@ export function ProductPage() {
 			setSuccess(true);
 			setErrors({});
 
-			// редирект после успешной отправки
 			setTimeout(() => {
 				navigate('/claims');
 			}, 1000);
 		} catch (err) {
 			console.error(err);
 			setErrors({ server: 'Ошибка при создании заявки' });
+		} finally {
+			setLoading(false);
 		}
 	};
 
-	if (!product) return <div>Loading...</div>;
+	if (!loading) return <Loader />;
 
 	return (
 		<div>

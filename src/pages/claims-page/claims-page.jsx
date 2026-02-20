@@ -1,22 +1,29 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/api';
+import { Loader } from '../../components';
 
 export function ClaimsPage() {
 	const [orders, setOrders] = useState([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
+				setLoading(true);
 				const res = await api.get('/orders/my');
 				setOrders(res.data);
 			} catch (err) {
 				console.error(err);
 				alert('Ошибка загрузки заявок');
+			} finally {
+				setLoading(false);
 			}
 		};
 
 		fetchOrders();
 	}, []);
+
+	if (loading) return <Loader />;
 
 	return (
 		<div>
