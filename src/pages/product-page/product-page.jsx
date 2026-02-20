@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../../api/api';
-import { Loader } from '../../components';
+import { Loader, Button } from '../../components';
 import styles from './product-page.module.css';
 
 export function ProductPage() {
@@ -79,8 +79,10 @@ export function ProductPage() {
 		}
 	};
 
-	if (!loading) return <Loader />;
-
+	if (loading) return <Loader />;
+	if (!product) {
+		return <p>Продукт не найден</p>;
+	}
 	return (
 		<div>
 			<h2>{product.title}</h2>
@@ -97,9 +99,9 @@ export function ProductPage() {
 
 			<h3>Выберите услугу</h3>
 
-			<button onClick={() => setType('Purchase')}>Купить оборудование</button>
+			<Button onClick={() => setType('Purchase')}>Купить оборудование</Button>
 
-			<button onClick={() => setType('Rent')}>Арендовать оборудование</button>
+			<Button onClick={() => setType('Rent')}>Арендовать оборудование</Button>
 
 			{errors.type && <p style={{ color: 'red' }}>{errors.type}</p>}
 
@@ -120,9 +122,9 @@ export function ProductPage() {
 				style={{ display: 'block', marginTop: '15px', width: '300px', height: '100px' }}
 			/>
 
-			<button onClick={handleCreateOrder} style={{ marginTop: '15px' }}>
+			<Button onClick={handleCreateOrder} style={{ marginTop: '15px' }}>
 				Оформить заявку
-			</button>
+			</Button>
 
 			{errors.server && <p style={{ color: 'red' }}>{errors.server}</p>}
 			{success && <p style={{ color: 'green' }}>Заявка отправлена</p>}

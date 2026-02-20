@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../api/api';
+import toast from 'react-hot-toast';
 import { Loader } from '../../components';
 
 export function ClaimsPage() {
@@ -14,7 +15,7 @@ export function ClaimsPage() {
 				setOrders(res.data);
 			} catch (err) {
 				console.error(err);
-				alert('Ошибка загрузки заявок');
+				toast.error(err.response?.data?.message || 'Ошибка сервера');
 			} finally {
 				setLoading(false);
 			}
@@ -33,8 +34,8 @@ export function ClaimsPage() {
 
 			{orders.map((order) => (
 				<div key={order._id} style={{ marginBottom: 20 }}>
-					<h4>{order.productId.title}</h4>
-					<p>{order.productId.description}</p>
+					<h4>{order.productId?.title}</h4>
+					<p>{order.productId?.description}</p>
 					<p>Тип: {order.type}</p>
 					<p>Статус: {order.status}</p>
 					<p>Комментарий: {order.comment}</p>
