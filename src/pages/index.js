@@ -6,3 +6,4 @@ export * from './main-page/main-page';
 export * from './login-page/login-page';
 export * from './claims-page/claims-page.jsx';
 export * from './admin-page/admin-orders/admin-orders.jsx';
+export * from './home-page/home-page.jsx';

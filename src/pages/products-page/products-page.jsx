@@ -25,6 +25,9 @@ export function ProductsPage() {
 	}, []);
 
 	if (loading) return <Loader />;
+	if (!products.length) {
+		return <p>Товары отсутствуют</p>;
+	}
 	return (
 		<div className={styles.wrapper}>
 			<h2>Моя продукция</h2>

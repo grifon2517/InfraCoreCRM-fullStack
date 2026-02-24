@@ -12,6 +12,7 @@ import {
 	ClaimsPage,
 	AdminOrdersPage,
 	RegisterPage,
+	HomePage,
 } from './pages';
 import './App.css';
 
@@ -57,7 +58,7 @@ function Diplom() {
 			<Header />
 			{/* <Content> */}
 			<Routes>
-				<Route path="/" element={<AdminPage />} />
+				<Route path="/" element={<HomePage />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<RegisterPage />} />
 				<Route

@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../store/authActions';
+import { Button } from './ui/button/button';
 
 export const Header = () => {
 	const { isAuth, user } = useSelector((state) => state.auth);
@@ -16,7 +17,7 @@ export const Header = () => {
 		<header style={styles.header}>
 			{/* LEFT — LOGO */}
 			<div style={styles.left}>
-				<Link to="/products" style={styles.logo}>
+				<Link to="/" style={styles.logo}>
 					Лого
 				</Link>
 			</div>
@@ -30,16 +31,22 @@ export const Header = () => {
 			<div style={styles.right}>
 				{!isAuth && (
 					<>
-						<Link to="/login">Войти</Link>
-						<Link to="/register">Регистрация</Link>
+						<Button as="link" to="/login">
+							Войти
+						</Button>
+						<Button as="link" to="/register">
+							Регистрация
+						</Button>
 					</>
 				)}
 
 				{isAuth && user?.role === 'user' && (
 					<>
-						<Link to="/claims">Мои заявки</Link>
+						<Button as="link" to="/claims">
+							Мои заявки
+						</Button>
 						<span>{user.login}</span>
-						<button onClick={handleLogout}>Выйти</button>
+						<Button onClick={handleLogout}>Выйти</Button>
 					</>
 				)}
 
@@ -48,7 +55,7 @@ export const Header = () => {
 						<Link to="/orders">Заявки</Link>
 						<Link to="/users">Пользователи</Link>
 						<span>{user.login}</span>
-						<button onClick={handleLogout}>Выйти</button>
+						<Button onClick={handleLogout}>Выйти</Button>
 					</>
 				)}
 			</div>
@@ -61,7 +68,7 @@ const styles = {
 		position: 'fixed',
 		top: 0,
 		left: 0,
-		width: '100%',
+		width: '98%',
 		height: '70px',
 		background: '#111',
 		color: '#fff',

@@ -14,19 +14,21 @@ export function ProductPage() {
 	const [comment, setComment] = useState('');
 	const [errors, setErrors] = useState({});
 	const [success, setSuccess] = useState(false);
-	const [loading, setLoading] = useState(true);
+
+	const [pageLoading, setPageLoading] = useState(true);
+	const [orderLoading, setOrderLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
-				setLoading(true);
+				setPageLoading(true);
 				const res = await api.get(`/products/${id}`);
 
 				setProduct(res.data);
 			} catch (err) {
 				console.error(err);
 			} finally {
-				setLoading(false);
+				setPageLoading(false);
 			}
 		};
 
@@ -57,7 +59,7 @@ export function ProductPage() {
 		}
 
 		try {
-			setLoading(true);
+			setOrderLoading(true);
 			await api.post('/orders', {
 				productId: id,
 				type,
@@ -75,11 +77,11 @@ export function ProductPage() {
 			console.error(err);
 			setErrors({ server: 'Ошибка при создании заявки' });
 		} finally {
-			setLoading(false);
+			setOrderLoading(false);
 		}
 	};
 
-	if (loading) return <Loader />;
+	if (pageLoading) return <Loader />;
 	if (!product) {
 		return <p>Продукт не найден</p>;
 	}
@@ -122,7 +124,11 @@ export function ProductPage() {
 				style={{ display: 'block', marginTop: '15px', width: '300px', height: '100px' }}
 			/>
 
-			<Button onClick={handleCreateOrder} style={{ marginTop: '15px' }}>
+			<Button
+				onClick={handleCreateOrder}
+				style={{ marginTop: '15px' }}
+				loading={orderLoading}
+			>
 				Оформить заявку
 			</Button>
 
