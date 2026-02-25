@@ -1,8 +1,13 @@
 module.exports = (err, req, res, next) => {
-  console.error("ERROR:", err);
+  console.error(err);
 
-  const status = err.status || 500;
-  const message = err.message || "Server error";
+  if (err instanceof require("../utils/api-error")) {
+    return res.status(err.status).json({
+      message: err.message,
+    });
+  }
 
-  res.status(status).json({ message });
+  return res.status(500).json({
+    message: "Unexpected server error",
+  });
 };

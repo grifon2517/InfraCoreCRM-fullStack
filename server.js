@@ -16,8 +16,8 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
-app.use(errorMiddleware);
 app.use("/api/admin", adminRoutes);
+app.use(errorMiddleware);
 
 mongoose
   .connect(process.env.MONGO_URI)

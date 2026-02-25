@@ -13,7 +13,11 @@ const OrderSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["repair", "diagnostic"],
+    enum: ["Purchase", "Rent"],
+  },
+  contactEmail: {
+    type: String,
+    required: true,
   },
   comment: String,
   status: {

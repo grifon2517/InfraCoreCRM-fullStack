@@ -5,7 +5,7 @@ const ApiError = require("../utils/api-error");
 
 exports.createOrder = async (req, res, next) => {
   try {
-    const { productId, type, comment } = req.body;
+    const { productId, contactEmail, type, comment } = req.body;
 
     // проверка авторизации
     if (!req.user || !req.user.userId) {
@@ -28,15 +28,25 @@ exports.createOrder = async (req, res, next) => {
     }
 
     // проверка типа заявки
-    const allowedTypes = ["repair", "diagnostic"];
+    const allowedTypes = ["Purchase", "Rent"];
     if (!allowedTypes.includes(type)) {
       return next(ApiError.badRequest("Invalid order type"));
+    }
+
+    if (!contactEmail) {
+      return next(ApiError.badRequest("Email is required"));
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactEmail)) {
+      return next(ApiError.badRequest("Invalid email"));
     }
 
     const order = new Order({
       userId: req.user.userId,
       productId,
       type,
+      contactEmail,
       comment: comment || "",
     });
 
