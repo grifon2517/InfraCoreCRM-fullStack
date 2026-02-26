@@ -5,6 +5,7 @@ const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
+const usersRoutes = require("./routes/usersRoutes");
 
 const adminRoutes = require("./routes/adminRoutes");
 require("dotenv").config();
@@ -17,6 +18,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/users", usersRoutes);
 app.use(errorMiddleware);
 
 mongoose

@@ -19,11 +19,18 @@ exports.deleteUser = async (req, res, next) => {
       return next(ApiError.badRequest("You cannot delete yourself"));
     }
 
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.findById(id);
 
     if (!user) {
       return next(ApiError.badRequest("User not found"));
     }
+
+    // 🚫 нельзя удалить администратора
+    if (user.role === "admin") {
+      return next(ApiError.badRequest("Admin cannot be deleted"));
+    }
+
+    await user.deleteOne();
 
     res.json({ message: "User deleted" });
   } catch (err) {
