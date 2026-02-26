@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../../api/admin';
-import { Loader } from '../../../components';
+import { Loader, OrderModal } from '../../../components';
+import styles from './admin-orders.module.css';
 
 export const AdminOrdersPage = () => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [selectedOrder, setSelectedOrder] = useState(null);
 
 	const fetchOrders = async () => {
 		try {
@@ -71,56 +73,59 @@ export const AdminOrdersPage = () => {
 	}
 
 	return (
-		<div style={{ padding: 20 }}>
-			<h1>Админ — заявки</h1>
+		<>
+			<table className={styles.table}>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Пользователь</th>
+						<th>Товар</th>
+						<th>Тип</th>
+						<th>Статус</th>
+						<th></th>
+					</tr>
+				</thead>
 
-			{orders.map((order) => (
-				<div
-					key={order._id}
-					style={{
-						border: '1px solid #ddd',
-						borderRadius: 10,
-						padding: 16,
-						marginBottom: 16,
-						background: '#475fac',
-					}}
-				>
-					<p>
-						<b>Пользователь:</b> {order.userId?.login}
-					</p>
-
-					<p>
-						<b>Товар:</b> {order.productId?.title}
-					</p>
-
-					<p>
-						<b>Тип:</b> {order.type}
-					</p>
-
-					<p>
-						<b>Комментарий:</b> {order.comment || '—'}
-					</p>
-
-					<div style={{ marginTop: 10 }}>
-						<b>Статус:</b>
-
-						<select
-							value={order.status}
-							onChange={(e) => handleStatusChange(order._id, e.target.value)}
-							style={{ marginLeft: 10 }}
+				<tbody>
+					{orders.map((order) => (
+						<tr
+							key={order._id}
+							className={styles.row}
+							onClick={() => setSelectedOrder(order)}
 						>
-							<option value="new">new</option>
-							<option value="in_progress">in progress</option>
-							<option value="done">done</option>
-							<option value="rejected">rejected</option>
-						</select>
-					</div>
+							<td>{order._id.slice(-6)}</td>
 
-					<button onClick={() => handleDelete(order._id)} style={{ marginTop: 12 }}>
-						Удалить
-					</button>
-				</div>
-			))}
-		</div>
+							<td>{order.userId?.login}</td>
+
+							<td>{order.productId?.title}</td>
+
+							<td>{order.type}</td>
+
+							<td>
+								<span className={styles.status}>{order.status}</span>
+							</td>
+
+							<td>
+								<button
+									className={styles.deleteBtn}
+									onClick={(e) => {
+										e.stopPropagation();
+										handleDelete(order._id);
+									}}
+								>
+									🗑
+								</button>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+			<OrderModal
+				order={selectedOrder}
+				onClose={() => setSelectedOrder(null)}
+				onStatusChange={handleStatusChange}
+				onDelete={handleDelete}
+			/>
+		</>
 	);
 };

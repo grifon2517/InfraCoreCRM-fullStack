@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import api from '../../api/api';
+import { Button } from '../../components';
 
 // схема валидации
 const schema = yup.object().shape({
@@ -81,10 +82,16 @@ export function Login() {
 					)}
 				</div>
 
-				<button disabled={!isValid || isSubmitting}>
+				<Button type="submit" disabled={!isValid || isSubmitting}>
 					{isSubmitting ? 'Вход...' : 'Войти'}
-				</button>
+				</Button>
 			</form>
+			<div>
+				<h4>Нет аккаунта? - Зарегстрируйтесь:</h4>
+				<Button as="link" to="/register">
+					Регистрация
+				</Button>
+			</div>
 		</div>
 	);
 }

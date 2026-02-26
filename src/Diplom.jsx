@@ -13,6 +13,7 @@ import {
 	AdminOrdersPage,
 	RegisterPage,
 	HomePage,
+	UserPage,
 } from './pages';
 import './App.css';
 
@@ -87,7 +88,7 @@ function Diplom() {
 					}
 				/>
 				<Route path="/order/:id" element={<div>Страница заявки</div>} />
-				<Route path="/users" element={<div>Страница пользователей</div>} />
+				<Route path="/users" element={<UserPage />} />
 				<Route path="*" element={<div>Страница ошибки</div>} />
 			</Routes>
 			{/* </Content> */}
