@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../../api/admin';
-import { Loader, OrderModal } from '../../../components';
+import { Button, Loader, OrderModal, confirmDelete } from '../../../components';
 import styles from './admin-orders.module.css';
 
 export const AdminOrdersPage = () => {
@@ -27,44 +27,32 @@ export const AdminOrdersPage = () => {
 	}, []);
 
 	const handleStatusChange = async (id, status) => {
+		setOrders((prev) => prev.map((order) => (order._id === id ? { ...order, status } : order)));
+
 		try {
-			setLoading(true);
-			const res = await updateOrderStatus(id, status);
-
-			setOrders((prev) =>
-				prev.map((order) =>
-					order._id === id ? { ...order, status: res.data.order.status } : order,
-				),
-			);
-
+			await updateOrderStatus(id, status);
 			toast.success('Статус обновлён');
 		} catch (err) {
-			console.error(err);
-			toast.error('Ошибка обновления статуса');
-		} finally {
-			setLoading(false);
+			fetchOrders(); // откат
+			toast.error('Ошибка обновления');
 		}
 	};
 
-	const handleDelete = async (id) => {
-		if (!window.confirm('Удалить заявку?')) return;
+	const handleDelete = (id) => {
+		confirmDelete(async () => {
+			try {
+				await deleteOrder(id);
 
-		try {
-			setLoading(true);
-			await deleteOrder(id);
+				setOrders((prev) => prev.filter((order) => order._id !== id));
 
-			setOrders((prev) => prev.filter((order) => order._id !== id));
-
-			toast.success('Заявка удалена');
-		} catch (err) {
-			console.error(err);
-			toast.error('Ошибка удаления');
-		} finally {
-			setLoading(false);
-		}
+				toast.success('Заявка удалена');
+			} catch {
+				toast.error('Ошибка удаления');
+			}
+		});
 	};
 
-	if (loading) {
+	if (loading && !orders.length) {
 		return <Loader />;
 	}
 
@@ -106,7 +94,7 @@ export const AdminOrdersPage = () => {
 							</td>
 
 							<td>
-								<button
+								<Button
 									className={styles.deleteBtn}
 									onClick={(e) => {
 										e.stopPropagation();
@@ -114,7 +102,7 @@ export const AdminOrdersPage = () => {
 									}}
 								>
 									🗑
-								</button>
+								</Button>
 							</td>
 						</tr>
 					))}
