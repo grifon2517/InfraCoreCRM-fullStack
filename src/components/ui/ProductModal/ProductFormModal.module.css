@@ -1,0 +1,59 @@
+/* Темный фон на весь экран */
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000; /* Чтобы точно было поверх всего */
+}
+
+/* Сама белая карточка модалки */
+.modal {
+	background-color: #fff;
+	padding: 30px;
+	border-radius: 8px;
+	width: 500px;
+	max-width: 90%;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+	/* Если у тебя темная тема, поменяй background-color на темный, а цвет текста на белый */
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.form input,
+.textarea {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-family: inherit;
+}
+
+.textarea {
+	min-height: 120px;
+	resize: vertical;
+}
+
+.fileInput {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	font-weight: 500;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 10px;
+}

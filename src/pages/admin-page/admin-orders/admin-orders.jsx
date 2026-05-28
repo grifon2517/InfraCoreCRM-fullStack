@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../../api/admin';
-import { Button, Loader, OrderModal, confirmDelete } from '../../../components';
+import { Button, Loader, OrderModal, ConfirmModal } from '../../../components';
+import { useModal } from '../../../hooks';
 import styles from './admin-orders.module.css';
 
 export const AdminOrdersPage = () => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [selectedOrder, setSelectedOrder] = useState(null);
+
+	const { isOpen, open, close } = useModal();
+	const [orderToDelete, setOrderToDelete] = useState(null);
 
 	const fetchOrders = async () => {
 		try {
@@ -38,18 +42,25 @@ export const AdminOrdersPage = () => {
 		}
 	};
 
-	const handleDelete = (id) => {
-		confirmDelete(async () => {
-			try {
-				await deleteOrder(id);
+	// Открывает модалку и запоминает ID заявки
+	const handleDeleteClick = (id) => {
+		setOrderToDelete(id);
+		open();
+	};
 
-				setOrders((prev) => prev.filter((order) => order._id !== id));
+	// Реально удаляет после подтверждения
+	const confirmOrderDelete = async () => {
+		if (!orderToDelete) return;
 
-				toast.success('Заявка удалена');
-			} catch {
-				toast.error('Ошибка удаления');
-			}
-		});
+		try {
+			await deleteOrder(orderToDelete);
+			setOrders((prev) => prev.filter((order) => order._id !== orderToDelete));
+			toast.success('Заявка удалена');
+		} catch {
+			toast.error('Ошибка удаления');
+		} finally {
+			close(); // Закрываем модалку в любом случае
+		}
 	};
 
 	if (loading && !orders.length) {
@@ -98,7 +109,7 @@ export const AdminOrdersPage = () => {
 									className={styles.deleteBtn}
 									onClick={(e) => {
 										e.stopPropagation();
-										handleDelete(order._id);
+										handleDeleteClick(order._id);
 									}}
 								>
 									🗑
@@ -112,7 +123,14 @@ export const AdminOrdersPage = () => {
 				order={selectedOrder}
 				onClose={() => setSelectedOrder(null)}
 				onStatusChange={handleStatusChange}
-				onDelete={handleDelete}
+				onDelete={handleDeleteClick} // Здесь тоже меняем на вызов модалки!
+			/>
+			<ConfirmModal
+				isOpen={isOpen}
+				onClose={close}
+				onConfirm={confirmOrderDelete}
+				title="Удаление заявки"
+				text="Вы уверены, что хотите удалить эту заявку? Это действие нельзя отменить."
 			/>
 		</>
 	);

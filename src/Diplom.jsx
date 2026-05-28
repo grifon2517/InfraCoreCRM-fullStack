@@ -14,6 +14,7 @@ import {
 	RegisterPage,
 	HomePage,
 	UserPage,
+	AdminProductsPage,
 } from './pages';
 import './App.css';
 
@@ -84,6 +85,14 @@ function Diplom() {
 					element={
 						<RequireAuth role="admin">
 							<AdminOrdersPage />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path="/admin/products"
+					element={
+						<RequireAuth role="admin">
+							<AdminProductsPage />
 						</RequireAuth>
 					}
 				/>
