@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -20,6 +21,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", usersRoutes);
 app.use(errorMiddleware);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 mongoose
   .connect(process.env.MONGO_URI)
