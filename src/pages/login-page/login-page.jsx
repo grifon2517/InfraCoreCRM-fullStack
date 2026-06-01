@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,15 +6,16 @@ import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import api from '../../api/api';
 import { Button } from '../../components';
+import styles from '../auth.module.css'; // Подключаем наши стили
 
-// схема валидации
+// Единая схема валидации
 const schema = yup.object().shape({
 	login: yup
 		.string()
 		.required('Введите логин')
 		.min(3, 'Минимум 3 символа')
 		.max(20, 'Максимум 20 символов')
-		.matches(/^[a-zA-Z0-9_]+$/, 'Только латиница, цифры и _'),
+		.matches(/^[a-zA-Z0-9_]+$/, 'Только латиница, цифры и нижнее подчеркивание'),
 
 	password: yup
 		.string()
@@ -30,6 +31,7 @@ export function Login() {
 	const {
 		register,
 		handleSubmit,
+		setError,
 		formState: { errors, isValid, isSubmitting },
 	} = useForm({
 		resolver: yupResolver(schema),
@@ -38,12 +40,9 @@ export function Login() {
 
 	const onSubmit = async (data) => {
 		try {
-			// логин
 			const res = await api.post('/auth/login', data);
-
 			localStorage.setItem('token', res.data.token);
 
-			// получаем текущего пользователя
 			const me = await api.get('/auth/me');
 
 			dispatch({
@@ -52,45 +51,66 @@ export function Login() {
 			});
 
 			toast.success('Добро пожаловать');
-
 			navigate('/products');
 		} catch (err) {
 			console.error(err);
-
 			const message = err.response?.data?.message || 'Ошибка сервера';
-
+			setError('password', {
+				type: 'server',
+				message: message,
+			});
 			toast.error(message);
 		}
 	};
 
 	return (
-		<div>
-			<h2>Login</h2>
+		<div className={styles.container}>
+			<div className={styles.card}>
+				<h2 className={styles.title}>Вход в систему</h2>
 
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<div>
-					<input {...register('login')} placeholder="Логин" />
-					{errors.login && (
-						<p style={{ color: 'red', fontSize: 12 }}>{errors.login.message}</p>
-					)}
+				<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+					<div className={styles.inputGroup}>
+						<input
+							className={styles.input}
+							{...register('login')}
+							placeholder="Логин"
+						/>
+						{/* Место под ошибку всегда забронировано */}
+						<span className={styles.errorText}>
+							{errors.login ? errors.login.message : ''}
+						</span>
+					</div>
+
+					<div className={styles.inputGroup}>
+						<input
+							className={styles.input}
+							type="password"
+							{...register('password')}
+							placeholder="Пароль"
+						/>
+						<span className={styles.errorText}>
+							{errors.password ? errors.password.message : ''}
+						</span>
+					</div>
+
+					<Button
+						className={styles.submitBtn}
+						type="submit"
+						disabled={!isValid || isSubmitting}
+					>
+						{isSubmitting ? 'Вход...' : 'Войти'}
+					</Button>
+				</form>
+
+				<div className={styles.footer}>
+					<p>Нет аккаунта?</p>
+					{/* Link из react-router-dom для плавно перехода */}
+					<Link to="/register" style={{ textDecoration: 'none' }}>
+						<Button className={styles.submitBtn} type="button">
+							Регистрация
+						</Button>
+					</Link>
 				</div>
-
-				<div>
-					<input type="password" {...register('password')} placeholder="Пароль" />
-					{errors.password && (
-						<p style={{ color: 'red', fontSize: 12 }}>{errors.password.message}</p>
-					)}
-				</div>
-
-				<Button type="submit" disabled={!isValid || isSubmitting}>
-					{isSubmitting ? 'Вход...' : 'Войти'}
-				</Button>
-			</form>
-			<div>
-				<h4>Нет аккаунта? - Зарегстрируйтесь:</h4>
-				<Button as="link" to="/register">
-					Регистрация
-				</Button>
 			</div>
 		</div>
 	);

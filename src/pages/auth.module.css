@@ -1,0 +1,81 @@
+/* Центрируем всю форму по центру экрана */
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 80px); /* Вычитаем высоту шапки, чтобы было ровно по центру */
+}
+
+/* Красный блок 1 со скриншота: создаем карточку */
+.card {
+	background-color: #2c2f33; /* Делаем фон чуть светлее основного фона страницы */
+	padding: 40px;
+	border-radius: 12px;
+	width: 100%;
+	max-width: 400px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Легкая тень для объема */
+	text-align: center;
+}
+
+.title {
+	font-size: 28px;
+	margin-bottom: 30px;
+	color: #ffffff;
+}
+
+/* Блок 2: Форма и отступы между инпутами */
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 15px; /* Вот он, идеальный отступ между полями ввода */
+	margin-bottom: 25px;
+}
+
+/* Обертка для одного инпута и его ошибки */
+.inputGroup {
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+}
+
+.input {
+	padding: 12px;
+	border-radius: 6px;
+	border: 1px solid #444;
+	background-color: #1e1e1e;
+	color: #fff;
+	font-size: 16px;
+	outline: none;
+	transition: border-color 0.2s;
+}
+
+.input:focus {
+	border-color: #3b82f6; /* Красивая синяя рамка при клике */
+}
+
+/* ГЛАВНАЯ МАГИЯ: Решаем проблему прыгающей верстки */
+.errorText {
+	color: #ff4d4f;
+	font-size: 12px;
+	margin-top: 4px;
+	min-height: 18px; /* Бронируем высоту! Даже если текста нет, место занято */
+	display: block;
+}
+
+.submitBtn {
+	margin-top: 10px;
+	width: 100%;
+	padding: 12px;
+	font-size: 16px;
+}
+
+/* Отделяем нижнюю часть с ссылкой на регистрацию */
+.footer {
+	border-top: 1px solid #444;
+	padding-top: 20px;
+	font-size: 14px;
+}
+
+.footer p {
+	margin-bottom: 10px;
+}

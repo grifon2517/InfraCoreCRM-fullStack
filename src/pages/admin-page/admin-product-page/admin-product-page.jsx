@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../../api/api';
 import { Button, Loader, ConfirmModal } from '../../../components';
 import { ProductFormModal } from '../../../components/ui/ProductModal/ProductFormModal';
-import { useModal } from '../../../hooks';
+import { useModal, useFetch } from '../../../hooks';
 import styles from './admin-product-page.module.css';
 
 export const AdminProductsPage = () => {
-	const [products, setProducts] = useState([]);
-	const [loading, setLoading] = useState(true);
-
 	// Состояния для редактирования и удаления
 	const [currentProduct, setCurrentProduct] = useState(null);
 	const [productToDelete, setProductToDelete] = useState(null);
@@ -18,22 +15,7 @@ export const AdminProductsPage = () => {
 	const formModal = useModal();
 	const deleteModal = useModal();
 
-	const fetchProducts = async () => {
-		try {
-			setLoading(true);
-			const res = await api.get('/products');
-			setProducts(res.data);
-		} catch (err) {
-			console.error(err);
-			toast.error('Ошибка загрузки товаров');
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchProducts();
-	}, []);
+	const { data: products, loading, setData: setProducts } = useFetch('/products');
 
 	// Открытие модалки для создания нового товара
 	const handleCreateClick = () => {

@@ -21,6 +21,11 @@ export const Header = () => {
 					Лого
 				</Link>
 			</div>
+			<div>
+				<Button as="link" to="/admin/products">
+					Товары
+				</Button>
+			</div>
 
 			{/* CENTER — TITLE */}
 			<div style={styles.center}>
