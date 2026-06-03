@@ -1,36 +1,52 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '../button/button';
 import styles from './ProductFormModal.module.css';
 
 export const ProductFormModal = ({ isOpen, onClose, onSave, product }) => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
-	const [image, setImage] = useState(null);
+	const [imageFile, setImageFile] = useState(null);
+	const [selectedFileName, setSelectedFileName] = useState(''); // Стейт для имени файла
 
-	// Если открыли для редактирования, заполняем поля данными товара
+	const fileInputRef = useRef(null);
+
+	// Синхронизируем стейты, если зашли в режиме редактирования товара
 	useEffect(() => {
-		if (product) {
-			setTitle(product.title || '');
-			setDescription(product.description || '');
-			setImage(null); // сбрасываем выбранный файл
-		} else {
-			setTitle('');
-			setDescription('');
-			setImage(null);
+		if (isOpen) {
+			if (product) {
+				setTitle(product.title || '');
+				setDescription(product.description || '');
+				setSelectedFileName(product.image ? 'Текущее изображение' : '');
+			} else {
+				// Если создаем новый — очищаем форму
+				setTitle('');
+				setDescription('');
+				setSelectedFileName('');
+			}
+			setImageFile(null);
 		}
 	}, [product, isOpen]);
 
 	if (!isOpen) return null;
 
+	const handleFileChange = (e) => {
+		const file = e.target.files[0];
+		if (file) {
+			setImageFile(file);
+			setSelectedFileName(file.name); // Теперь имя файла мгновенно выведется на экран!
+		}
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Упаковываем данные в FormData для отправки на бэкенд
+		// Переводим данные в FormData, чтобы бэкенд смог переварить картинку (multer)
 		const formData = new FormData();
 		formData.append('title', title);
 		formData.append('description', description);
-		if (image) {
-			formData.append('image', image);
+
+		if (imageFile) {
+			formData.append('image', imageFile);
 		}
 
 		onSave(formData);
@@ -39,39 +55,75 @@ export const ProductFormModal = ({ isOpen, onClose, onSave, product }) => {
 	return (
 		<div className={styles.overlay} onClick={onClose}>
 			<div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-				<h3>{product ? 'Редактировать товар' : 'Добавить товар'}</h3>
+				{/* Крестик закрытия */}
+				<button type="button" className={styles.closeCross} onClick={onClose}>
+					&times;
+				</button>
+
+				<h3 className={styles.modalTitle}>
+					{product ? 'Редактирование оборудования' : 'Добавление оборудования'}
+				</h3>
 
 				<form onSubmit={handleSubmit} className={styles.form}>
-					<input
-						type="text"
-						placeholder="Название оборудования"
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						required
-					/>
-
-					<textarea
-						placeholder="Подробное описание"
-						value={description}
-						onChange={(e) => setDescription(e.target.value)}
-						className={styles.textarea}
-						required
-					/>
-
-					<div className={styles.fileInput}>
-						<label>Картинка товара:</label>
+					<div className={styles.inputGroup}>
+						<label>Название товара</label>
 						<input
-							type="file"
-							accept="image/*"
-							onChange={(e) => setImage(e.target.files[0])}
+							type="text"
+							required
+							placeholder="Например: AI-вычислительный узел"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+							className={styles.input}
 						/>
 					</div>
 
+					<div className={styles.inputGroup}>
+						<label>Описание и характеристики</label>
+						<textarea
+							required
+							placeholder="Укажите подробные спецификации оборудования..."
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
+							className={styles.textarea}
+						/>
+					</div>
+
+					<div className={styles.inputGroup}>
+						<label>Изображение</label>
+						<div className={styles.fileUploadContainer}>
+							{/* Настоящий инпут прячем, кликаем по нему через label */}
+							<input
+								type="file"
+								accept="image/*"
+								ref={fileInputRef}
+								onChange={handleFileChange}
+								style={{ display: 'none' }}
+								id="modal-file-input"
+							/>
+							<label htmlFor="modal-file-input" className={styles.fileLabel}>
+								Выбрать файл...
+							</label>
+
+							{/* Показываем пользователю, что файл успешно прикрепился */}
+							{selectedFileName && (
+								<span className={styles.fileName} title={selectedFileName}>
+									📎 {selectedFileName}
+								</span>
+							)}
+						</div>
+					</div>
+
 					<div className={styles.actions}>
-						<Button type="button" onClick={onClose}>
+						<button
+							type="button"
+							className={`${styles.btn} ${styles.cancelBtn}`}
+							onClick={onClose}
+						>
 							Отмена
-						</Button>
-						<Button type="submit">Сохранить</Button>
+						</button>
+						<button type="submit" className={`${styles.btn} ${styles.saveBtn}`}>
+							Сохранить
+						</button>
 					</div>
 				</form>
 			</div>

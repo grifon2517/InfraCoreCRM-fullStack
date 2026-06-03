@@ -1,29 +1,44 @@
 import { Modal } from '../modal/modal';
 import { Button } from '../button/button';
+import styles from './confirmModal.module.css';
 
-export const ConfirmModal = ({
-	isOpen,
-	onClose,
-	onConfirm,
-	title = 'Подтвердите действие',
-	text = 'Вы действительно хотите удалить этот элемент?',
-}) => {
-	const handleConfirm = () => {
-		onConfirm();
-		onClose(); // Закрываем после подтверждения
-	};
+export const ConfirmModal = ({ isOpen, onClose, onConfirm, title, text }) => {
+	// Если модалка закрыта, просто ничего не рендерим
+	if (!isOpen) return null;
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} title={title}>
-			<p>{text}</p>
+		<div className={styles.overlay} onClick={onClose}>
+			{/* stopPropagation нужен, чтобы модалка не закрывалась при клике по самому окошку */}
+			<div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+				{/* Кнопка-крестик в углу */}
+				<button type="button" className={styles.closeCross} onClick={onClose}>
+					&times;
+				</button>
 
-			<div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
-				{/* Тут можно поиграть с цветами кнопок, если у тебя в Button есть variant="danger" */}
-				<Button onClick={handleConfirm}>Да, удалить</Button>
-				<Button onClick={onClose} style={{ background: '#555' }}>
-					Отмена
-				</Button>
+				<h3 className={styles.title}>{title || 'Подтверждение действия'}</h3>
+
+				<p className={styles.text}>{text}</p>
+
+				<div className={styles.actions}>
+					{/* Кнопка Отмена (тихая, серая) */}
+					<button
+						type="button"
+						className={`${styles.btn} ${styles.cancelBtn}`}
+						onClick={onClose}
+					>
+						Отмена
+					</button>
+
+					{/* Кнопка Удалить (агрессивная, красная) */}
+					<button
+						type="button"
+						className={`${styles.btn} ${styles.confirmBtn}`}
+						onClick={onConfirm}
+					>
+						Да, удалить
+					</button>
+				</div>
 			</div>
-		</Modal>
+		</div>
 	);
 };

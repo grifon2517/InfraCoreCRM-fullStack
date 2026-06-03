@@ -14,6 +14,20 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	overflow-x: hidden; /* Защита от случайного горизонтального скролла */
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
 /* Сброс дефолтных отступов браузера (Reset) */
 * {
 	box-sizing: border-box;

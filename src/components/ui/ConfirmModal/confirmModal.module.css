@@ -1,0 +1,101 @@
+/* Затемняющий фон на весь экран */
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(4px); /* Легкое размытие заднего плана */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2000;
+}
+
+/* Само окошко модалки */
+.modal {
+	background-color: #1a1d24; /* В цвет нашей новой таблицы */
+	border: 1px solid #2c313c;
+	border-radius: 14px;
+	padding: 30px;
+	width: 100%;
+	max-width: 450px;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+	position: relative;
+}
+
+/* Иконка крестика для закрытия */
+.closeCross {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: none;
+	border: none;
+	color: #777;
+	font-size: 20px;
+	cursor: pointer;
+	transition: color 0.2s;
+	padding: 0;
+	line-height: 1;
+}
+
+.closeCross:hover {
+	color: #fff;
+}
+
+.title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #ffffff;
+	margin-bottom: 14px;
+	text-align: left;
+}
+
+.text {
+	font-size: 15px;
+	color: #b9bbbe;
+	line-height: 1.5;
+	margin-bottom: 24px;
+	text-align: left;
+}
+
+/* Контейнер для кнопок внизу */
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+/* Базовые стили для обеих кнопок внутри модалки */
+.btn {
+	padding: 10px 20px;
+	font-size: 14px;
+	font-weight: 500;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: 1px solid transparent;
+}
+
+/* Красная опасная кнопка удаления */
+.confirmBtn {
+	background-color: #ef4444;
+	color: #ffffff;
+}
+
+.confirmBtn:hover {
+	background-color: #dc2626;
+}
+
+/* Нейтральная серая кнопка отмены */
+.cancelBtn {
+	background-color: #2c313c;
+	border-color: #3f4452;
+	color: #e1e3e6;
+}
+
+.cancelBtn:hover {
+	background-color: #3f4452;
+	color: #ffffff;
+}

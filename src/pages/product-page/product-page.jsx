@@ -74,9 +74,14 @@ export function ProductPage() {
 			<h2 className={styles.title}>{product.title}</h2>
 
 			<div className={styles.imageWrap}>
-				{/* Исправили путь к картинке на твой исходный */}
 				<img
-					src={product.image || '/placeholder.jpg'}
+					src={
+						product.image
+							? product.image.includes('uploads')
+								? `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image}`
+								: product.image
+							: '/placeholder.jpg'
+					}
 					alt={product.title}
 					className={styles.image}
 				/>
