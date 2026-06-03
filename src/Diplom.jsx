@@ -59,47 +59,49 @@ function Diplom() {
 			/>
 			<Header />
 			{/* <Content> */}
-			<Routes>
-				<Route path="/" element={<HomePage />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<RegisterPage />} />
-				<Route
-					path="/products"
-					element={
-						<RequireAuth>
-							<ProductsPage />
-						</RequireAuth>
-					}
-				/>
-				<Route path="/product/:id" element={<ProductPage />} />
-				<Route
-					path="/claims"
-					element={
-						<RequireAuth>
-							<ClaimsPage />
-						</RequireAuth>
-					}
-				/>
-				<Route
-					path="/orders"
-					element={
-						<RequireAuth role="admin">
-							<AdminOrdersPage />
-						</RequireAuth>
-					}
-				/>
-				<Route
-					path="/admin/products"
-					element={
-						<RequireAuth role="admin">
-							<AdminProductsPage />
-						</RequireAuth>
-					}
-				/>
-				<Route path="/order/:id" element={<div>Страница заявки</div>} />
-				<Route path="/users" element={<UserPage />} />
-				<Route path="*" element={<div>Страница ошибки</div>} />
-			</Routes>
+			<main className="main-content">
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<RegisterPage />} />
+					<Route
+						path="/products"
+						element={
+							<RequireAuth>
+								<ProductsPage />
+							</RequireAuth>
+						}
+					/>
+					<Route path="/product/:id" element={<ProductPage />} />
+					<Route
+						path="/claims"
+						element={
+							<RequireAuth>
+								<ClaimsPage />
+							</RequireAuth>
+						}
+					/>
+					<Route
+						path="/orders"
+						element={
+							<RequireAuth role="admin">
+								<AdminOrdersPage />
+							</RequireAuth>
+						}
+					/>
+					<Route
+						path="/admin/products"
+						element={
+							<RequireAuth role="admin">
+								<AdminProductsPage />
+							</RequireAuth>
+						}
+					/>
+					<Route path="/order/:id" element={<div>Страница заявки</div>} />
+					<Route path="/users" element={<UserPage />} />
+					<Route path="*" element={<div>Страница ошибки</div>} />
+				</Routes>
+			</main>
 			{/* </Content> */}
 			{/* <Footer /> */}
 		</>

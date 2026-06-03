@@ -1,39 +1,22 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import api from '../../api/api';
 import { Loader, Button } from '../../components';
+import { useFetch } from '../../hooks/useFetch';
 import styles from './product-page.module.css';
 
 export function ProductPage() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const [product, setProduct] = useState(null);
+	const { data: product, loading: pageLoading } = useFetch(`/products/${id}`, null);
+
 	const [type, setType] = useState(null);
 	const [email, setEmail] = useState('');
 	const [comment, setComment] = useState('');
 	const [errors, setErrors] = useState({});
 	const [success, setSuccess] = useState(false);
-
-	const [pageLoading, setPageLoading] = useState(true);
 	const [orderLoading, setOrderLoading] = useState(false);
-
-	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				setPageLoading(true);
-				const res = await api.get(`/products/${id}`);
-
-				setProduct(res.data);
-			} catch (err) {
-				console.error(err);
-			} finally {
-				setPageLoading(false);
-			}
-		};
-
-		fetchProduct();
-	}, [id]);
 
 	const validate = () => {
 		const newErrors = {};
@@ -83,13 +66,15 @@ export function ProductPage() {
 
 	if (pageLoading) return <Loader />;
 	if (!product) {
-		return <p>Продукт не найден</p>;
+		return <p className={styles.notFound}>Продукт не найден</p>;
 	}
+
 	return (
-		<div>
-			<h2>{product.title}</h2>
+		<div className={styles.container}>
+			<h2 className={styles.title}>{product.title}</h2>
 
 			<div className={styles.imageWrap}>
+				{/* Исправили путь к картинке на твой исходный */}
 				<img
 					src={product.image || '/placeholder.jpg'}
 					alt={product.title}
@@ -97,43 +82,64 @@ export function ProductPage() {
 				/>
 			</div>
 
-			<p>{product.description}</p>
+			<p className={styles.description}>{product.description}</p>
 
-			<h3>Выберите услугу</h3>
+			<div className={styles.orderCard}>
+				<h3 className={styles.cardTitle}>Оформление заявки</h3>
 
-			<Button onClick={() => setType('Purchase')}>Купить оборудование</Button>
+				<p className={styles.label}>Выберите тип услуги:</p>
+				<div className={styles.serviceGroup}>
+					{/* Заменили на нативные button, чтобы стили CSS-модуля применились железно */}
+					<button
+						type="button"
+						className={`${styles.typeBtn} ${type === 'Purchase' ? styles.activeType : ''}`}
+						onClick={() => setType('Purchase')}
+					>
+						Купить оборудование
+					</button>
 
-			<Button onClick={() => setType('Rent')}>Арендовать оборудование</Button>
+					<button
+						type="button"
+						className={`${styles.typeBtn} ${type === 'Rent' ? styles.activeType : ''}`}
+						onClick={() => setType('Rent')}
+					>
+						Арендовать оборудование
+					</button>
+				</div>
+				<span className={styles.errorText}>{errors.type || ''}</span>
 
-			{errors.type && <p style={{ color: 'red' }}>{errors.type}</p>}
+				<div className={styles.inputGroup}>
+					<input
+						type="email"
+						placeholder="Email для связи"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						className={styles.input}
+					/>
+					<span className={styles.errorText}>{errors.email || ''}</span>
+				</div>
 
-			<input
-				type="email"
-				placeholder="Email для связи"
-				value={email}
-				onChange={(e) => setEmail(e.target.value)}
-				style={{ display: 'block', marginTop: '15px' }}
-			/>
+				<div className={styles.inputGroup}>
+					<textarea
+						placeholder="Комментарий к заявке (требования, сроки, конфигурация)"
+						value={comment}
+						onChange={(e) => setComment(e.target.value)}
+						className={styles.textarea}
+					/>
+				</div>
 
-			{errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+				{/* Для главной кнопки отправки оставляем твой Button */}
+				<Button
+					onClick={handleCreateOrder}
+					className={styles.submitBtn}
+					loading={orderLoading}
+				>
+					Оформить заявку
+				</Button>
 
-			<textarea
-				placeholder="Комментарий к заявке"
-				value={comment}
-				onChange={(e) => setComment(e.target.value)}
-				style={{ display: 'block', marginTop: '15px', width: '300px', height: '100px' }}
-			/>
-
-			<Button
-				onClick={handleCreateOrder}
-				style={{ marginTop: '15px' }}
-				loading={orderLoading}
-			>
-				Оформить заявку
-			</Button>
-
-			{errors.server && <p style={{ color: 'red' }}>{errors.server}</p>}
-			{success && <p style={{ color: 'green' }}>Заявка отправлена</p>}
+				{errors.server && <p className={styles.serverError}>{errors.server}</p>}
+				{success && <p className={styles.successText}>Заявка успешно отправлена!</p>}
+			</div>
 		</div>
 	);
 }

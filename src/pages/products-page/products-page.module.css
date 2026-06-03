@@ -1,9 +1,27 @@
 .wrapper {
-	padding: 24px;
+	max-width: 1200px; /* Ограничиваем ширину каталога для аккуратного вида */
+	margin: 40px auto; /* Центрируем сам каталог на странице и даем отступ сверху */
+	padding: 0 24px;
+}
+
+.title {
+	font-size: 32px;
+	font-weight: 600;
+	margin-bottom: 30px;
+	position: relative;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #333; /* Аккуратная тонкая линия под заголовком */
 }
 
 .grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-	gap: 20px;
+	/* Твоя сетка — отличная, оставляем её, теперь она будет работать правильно */
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 24px; /* Чуть увеличили расстояние между карточками */
+}
+
+.emptyText {
+	text-align: center;
+	margin-top: 100px;
+	color: #888;
 }

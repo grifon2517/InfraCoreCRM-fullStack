@@ -1,0 +1,48 @@
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 70px;
+	background: #111;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 20px;
+	z-index: 1000;
+}
+
+.left {
+	width: 25%;
+	display: flex;
+	align-items: center;
+	gap: 20px; /* Красивый отступ между лого и кнопкой */
+}
+
+.center {
+	width: 50%;
+	text-align: center;
+}
+
+/* Сбрасываем нижний маргин у h2, который мы задали в index.css,
+   чтобы заголовок стоял ровно по центру хедера */
+.center h2 {
+	margin-bottom: 0;
+	font-size: 24px;
+}
+
+.right {
+	width: 25%;
+	display: flex;
+	gap: 15px;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.logo {
+	font-size: 20px;
+	font-weight: bold;
+	color: #fff;
+	text-decoration: none;
+}

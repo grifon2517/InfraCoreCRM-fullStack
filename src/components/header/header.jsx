@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../store/authActions';
-import { Button } from './ui/button/button';
+import { logout } from '../../store/authActions';
+import { Button } from '../ui/button/button';
+import styles from './header.module.css';
 
 export const Header = () => {
 	const { isAuth, user } = useSelector((state) => state.auth);
@@ -14,26 +15,26 @@ export const Header = () => {
 	};
 
 	return (
-		<header style={styles.header}>
-			{/* LEFT — LOGO */}
-			<div style={styles.left}>
-				<Link to="/" style={styles.logo}>
+		<header className={styles.header}>
+			{/* LEFT — LOGO & NAV */}
+			<div className={styles.left}>
+				<Link to="/" className={styles.logo}>
 					Лого
 				</Link>
-			</div>
-			<div>
+				{/* Перенесли кнопку внутрь левого контейнера */}
 				<Button as="link" to="/admin/products">
 					Товары
 				</Button>
 			</div>
 
 			{/* CENTER — TITLE */}
-			<div style={styles.center}>
+			<div className={styles.center}>
 				<h2>Service Center CRM</h2>
 			</div>
 
 			{/* RIGHT — NAV */}
-			<div style={styles.right}>
+			<div className={styles.right}>
+				{/* Тут оставляешь всё как было (логика авторизации и роли) */}
 				{!isAuth && (
 					<>
 						<Button as="link" to="/login">
@@ -66,45 +67,4 @@ export const Header = () => {
 			</div>
 		</header>
 	);
-};
-
-const styles = {
-	header: {
-		position: 'fixed',
-		top: 0,
-		left: 0,
-		width: '98%',
-		height: '70px',
-		background: '#111',
-		color: '#fff',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		padding: '0 20px',
-		zIndex: 1000,
-	},
-
-	left: {
-		width: '25%',
-	},
-
-	center: {
-		width: '50%',
-		textAlign: 'center',
-	},
-
-	right: {
-		width: '25%',
-		display: 'flex',
-		gap: '15px',
-		justifyContent: 'flex-end',
-		alignItems: 'center',
-	},
-
-	logo: {
-		fontSize: '20px',
-		fontWeight: 'bold',
-		color: '#fff',
-		textDecoration: 'none',
-	},
 };
