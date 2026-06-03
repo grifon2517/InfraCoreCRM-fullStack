@@ -1,8 +1,9 @@
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/authActions';
-import { Button } from '../ui/button/button';
-import styles from './header.module.css';
+import { Logo } from '../logo/logo';
+import styles from './header.module.css'; // Подключаем наши модульные стили
 
 export const Header = () => {
 	const { isAuth, user } = useSelector((state) => state.auth);
@@ -16,52 +17,61 @@ export const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			{/* LEFT — LOGO & NAV */}
-			<div className={styles.left}>
-				<Link to="/" className={styles.logo}>
-					Лого
+			{/* LEFT СЕКЦИЯ — ЛОГОТИП И КАТАЛОГ */}
+			<div className={styles.leftSection}>
+				<Link to="/" className={styles.logoLink}>
+					<Logo />
 				</Link>
-				{/* Перенесли кнопку внутрь левого контейнера */}
-				<Button as="link" to="/admin/products">
+				<Link to="/admin/products" className={styles.catalogBtn}>
 					Товары
-				</Button>
+				</Link>
 			</div>
 
-			{/* CENTER — TITLE */}
-			<div className={styles.center}>
-				<h2>Service Center CRM</h2>
+			{/* CENTER СЕКЦИЯ — ИДЕАЛЬНО ОТЦЕНТРОВАННЫЙ ЗАГОЛОВОК С ГРАДИЕНТОМ */}
+			<div className={styles.centerTitle}>
+				InfraCore<span className={styles.titleAccent}>CRM</span>
 			</div>
 
-			{/* RIGHT — NAV */}
-			<div className={styles.right}>
-				{/* Тут оставляешь всё как было (логика авторизации и роли) */}
+			{/* RIGHT СЕКЦИЯ — НАВИГАЦИЯ И АВТОРИЗАЦИЯ */}
+			<div className={styles.rightSection}>
+				{/* 1. Если пользователь ГОСТЬ */}
 				{!isAuth && (
 					<>
-						<Button as="link" to="/login">
+						<Link to="/login" className={styles.navLink}>
 							Войти
-						</Button>
-						<Button as="link" to="/register">
+						</Link>
+						<Link to="/register" className={styles.registerBtn}>
 							Регистрация
-						</Button>
+						</Link>
 					</>
 				)}
 
+				{/* 2. Если залогинен ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ */}
 				{isAuth && user?.role === 'user' && (
 					<>
-						<Button as="link" to="/claims">
+						<Link to="/claims" className={styles.navLink}>
 							Мои заявки
-						</Button>
-						<span>{user.login}</span>
-						<Button onClick={handleLogout}>Выйти</Button>
+						</Link>
+						<span className={styles.username}>{user.login}</span>
+						<button type="button" className={styles.logoutBtn} onClick={handleLogout}>
+							Выйти
+						</button>
 					</>
 				)}
 
+				{/* 3. Если залогинен АДМИНИСТРАТОР */}
 				{isAuth && user?.role === 'admin' && (
 					<>
-						<Link to="/orders">Заявки</Link>
-						<Link to="/users">Пользователи</Link>
-						<span>{user.login}</span>
-						<Button onClick={handleLogout}>Выйти</Button>
+						<Link to="/orders" className={styles.navLink}>
+							Заявки
+						</Link>
+						<Link to="/users" className={styles.navLink}>
+							Пользователи
+						</Link>
+						<span className={styles.username}>{user.login}</span>
+						<button type="button" className={styles.logoutBtn} onClick={handleLogout}>
+							Выйти
+						</button>
 					</>
 				)}
 			</div>

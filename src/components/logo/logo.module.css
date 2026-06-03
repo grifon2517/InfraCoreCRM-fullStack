@@ -1,0 +1,23 @@
+.logoWrapper {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	user-select: none;
+	transition: transform 0.2s ease;
+	padding-right: 15px; /* Небольшой отступ до названия */
+}
+
+.logoWrapper:hover {
+	transform: scale(1.04); /* Интерактивное увеличение при наведении */
+}
+
+.svgIcon {
+	/* Мягкое технологичное свечение вокруг "серверов" */
+	filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.3));
+	transition: filter 0.2s ease;
+}
+
+.logoWrapper:hover .svgIcon {
+	/* Усиливаем неон при наведении */
+	filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+}
