@@ -13,30 +13,30 @@ exports.register = async (req, res, next) => {
 
     // обязательные поля
     if (!login || !password) {
-      throw ApiError.badRequest("Login and password are required");
+      throw ApiError.badRequest("Логин и пароль обязательны для заполнения");
     }
 
     // длина логина
     if (login.length < 3 || login.length > 20) {
-      throw ApiError.badRequest("Login must be 3-20 characters");
+      throw ApiError.badRequest("Логин должен быть от 3 до 20 символов");
     }
 
     // только латиница + цифры + _
     if (!LOGIN_REGEX.test(login)) {
       throw ApiError.badRequest(
-        "Login can contain only latin letters, numbers and underscore",
+        "Логин может содержать только латинские буквы, цифры и нижнее подчеркивание",
       );
     }
 
     // длина пароля
     if (password.length < 6) {
-      throw ApiError.badRequest("Password must be at least 6 characters");
+      throw ApiError.badRequest("Пароль должен быть не менее 6 символов");
     }
 
     // существует ли пользователь
     const existingUser = await User.findOne({ login });
     if (existingUser) {
-      throw ApiError.badRequest("User already exists");
+      throw ApiError.badRequest("Пользователь с таким логином уже существует");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -50,7 +50,7 @@ exports.register = async (req, res, next) => {
 
     await user.save();
 
-    res.json({ message: "User registered successfully" });
+    res.json({ message: "Пользователь успешно зарегистрирован" });
   } catch (err) {
     next(err);
   }
@@ -62,12 +62,12 @@ exports.login = async (req, res, next) => {
     const { login, password } = req.body;
 
     if (!login || !password) {
-      throw ApiError.badRequest("Login and password are required");
+      throw ApiError.badRequest("Неверный логин");
     }
 
     const user = await User.findOne({ login });
     if (!user) {
-      throw ApiError.badRequest("Invalid login or password");
+      throw ApiError.badRequest("Неверный пароль");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -82,7 +82,7 @@ exports.login = async (req, res, next) => {
     );
 
     res.json({
-      message: "Login successful",
+      message: "Вход выполнен успешно",
       token,
       user: {
         id: user._id,
