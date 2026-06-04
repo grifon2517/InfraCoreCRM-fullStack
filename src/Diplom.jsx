@@ -15,6 +15,7 @@ import {
 	HomePage,
 	UserPage,
 	AdminProductsPage,
+	NotFoundPage,
 } from './pages';
 import './App.css';
 
@@ -58,12 +59,17 @@ function Diplom() {
 				}}
 			/>
 			<Header />
-			{/* <Content> */}
+
 			<main className="main-content">
 				<Routes>
+					{/* Публичные страницы */}
 					<Route path="/" element={<HomePage />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/product/:id" element={<ProductPage />} />
+					<Route path="/order/:id" element={<div>Страница заявки</div>} />
+
+					{/* Приватные страницы пользователя */}
 					<Route
 						path="/products"
 						element={
@@ -72,7 +78,6 @@ function Diplom() {
 							</RequireAuth>
 						}
 					/>
-					<Route path="/product/:id" element={<ProductPage />} />
 					<Route
 						path="/claims"
 						element={
@@ -81,6 +86,8 @@ function Diplom() {
 							</RequireAuth>
 						}
 					/>
+
+					{/* СТРОГО АДМИНСКИЕ СТРАНИЦЫ (С МАСКИРОВКОЙ ПОД 404) */}
 					<Route
 						path="/orders"
 						element={
@@ -97,13 +104,20 @@ function Diplom() {
 							</RequireAuth>
 						}
 					/>
-					<Route path="/order/:id" element={<div>Страница заявки</div>} />
-					<Route path="/users" element={<UserPage />} />
-					<Route path="*" element={<div>Страница ошибки</div>} />
+					{/* ИСПРАВЛЕНО: Теперь список пользователей тоже под железным замком админа! */}
+					<Route
+						path="/users"
+						element={
+							<RequireAuth role="admin">
+								<UserPage />
+							</RequireAuth>
+						}
+					/>
+
+					{/* ГЛОБАЛЬНЫЙ ОТЛОВ ВСЕХ ОШИБОК И НЕСУЩЕСТВУЮЩИХ СТРАНИЦ */}
+					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</main>
-			{/* </Content> */}
-			{/* <Footer /> */}
 		</>
 	);
 }

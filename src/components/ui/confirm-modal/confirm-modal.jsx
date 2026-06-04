@@ -1,6 +1,6 @@
 import { Modal } from '../modal/modal';
 import { Button } from '../button/button';
-import styles from './confirmModal.module.css';
+import styles from './confirm-modal.module.css';
 
 export const ConfirmModal = ({ isOpen, onClose, onConfirm, title, text }) => {
 	// Если модалка закрыта, просто ничего не рендерим

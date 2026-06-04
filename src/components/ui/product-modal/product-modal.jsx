@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '../button/button';
-import styles from './ProductFormModal.module.css';
+import styles from './product-modal.module.css';
 
 export const ProductFormModal = ({ isOpen, onClose, onSave, product }) => {
 	const [title, setTitle] = useState('');

@@ -1,5 +1,5 @@
 import { Modal } from '../modal/modal'; // Укажи правильный путь к базовой модалке
-import styles from './orderModal.module.css';
+import styles from './order-modal.module.css';
 
 export const OrderModal = ({ order, onClose, onStatusChange, onDelete }) => {
 	// Если клика по заявке не было, модалка спит

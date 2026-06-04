@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../../api/api';
 import { Loader, ConfirmModal } from '../../../components';
-import { ProductFormModal } from '../../../components/ui/ProductModal/ProductFormModal';
+import { ProductFormModal } from '../../../components/ui/product-modal/product-modal';
 import { useModal, useFetch } from '../../../hooks';
 import styles from './admin-product-page.module.css';
 

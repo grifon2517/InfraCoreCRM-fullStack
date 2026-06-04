@@ -14,6 +14,7 @@ export const Header = () => {
 		dispatch(logout());
 		navigate('/login');
 	};
+	const productsPath = isAuth && user?.role === 'admin' ? '/admin/products' : '/products';
 
 	return (
 		<header className={styles.header}>
@@ -22,15 +23,16 @@ export const Header = () => {
 				<Link to="/" className={styles.logoLink}>
 					<Logo />
 				</Link>
-				<Link to="/admin/products" className={styles.catalogBtn}>
+				{/* МЕНЯЕМ ТУТ: вместо "/admin/products" ставим {productsPath} */}
+				<Link to={productsPath} className={styles.catalogBtn}>
 					Товары
 				</Link>
 			</div>
 
 			{/* CENTER СЕКЦИЯ — ИДЕАЛЬНО ОТЦЕНТРОВАННЫЙ ЗАГОЛОВОК С ГРАДИЕНТОМ */}
-			<div className={styles.centerTitle}>
+			<Link to="/" className={styles.centerTitle}>
 				InfraCore<span className={styles.titleAccent}>CRM</span>
-			</div>
+			</Link>
 
 			{/* RIGHT СЕКЦИЯ — НАВИГАЦИЯ И АВТОРИЗАЦИЯ */}
 			<div className={styles.rightSection}>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styles from './products-card.module.css';
+import styles from './product-card.module.css';
 
 export function ProductCard({ product }) {
 	return (

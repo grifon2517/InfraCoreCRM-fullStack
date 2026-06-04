@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { getAllOrders, updateOrderStatus, deleteOrder } from '../../../api/admin';
 import { Button, Loader, OrderModal, ConfirmModal } from '../../../components';
 import { useModal } from '../../../hooks';
-import styles from './admin-orders.module.css';
+import styles from './admin-orders-page.module.css';
 
 export const AdminOrdersPage = () => {
 	// Возвращаем проверенные стейты

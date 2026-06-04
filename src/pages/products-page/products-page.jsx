@@ -1,5 +1,5 @@
 import { useFetch } from '../../hooks/useFetch';
-import { ProductCard } from '../../components/products-card/products-card';
+import { ProductCard } from '../../components/product-card/product-card';
 import { Loader } from '../../components';
 import styles from './products-page.module.css';
 

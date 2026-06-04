@@ -1,10 +1,10 @@
 export * from './header/header';
-export * from './require-auth';
-export * from './ui/loader';
+export * from './require-auth/require-auth';
+export * from './ui/loader/loader';
 export * from './ui/button/button';
 export * from './ui/modal/modal';
 
-export * from './ui/OrderModal/orderModal';
-export * from './ui/ConfirmModal/confirmModal';
-export * from './ui/ProductModal/ProductFormModal';
+export * from './ui/order-modal/order-modal';
+export * from './ui/confirm-modal/confirm-modal';
+export * from './ui/product-modal/product-modal';
 export * from './logo/logo';
