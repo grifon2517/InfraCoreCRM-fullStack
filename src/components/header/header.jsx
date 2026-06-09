@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../../store/authActions';
+import { logout } from '../../store/auth-actions';
 import { Logo } from '../logo/logo';
 import styles from './header.module.css'; // Подключаем наши модульные стили
 

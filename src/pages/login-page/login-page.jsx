@@ -67,7 +67,7 @@ export function Login() {
 		<div className={styles.container}>
 			<div className={styles.card}>
 				<h2 className={styles.title}>Вход в систему</h2>
-
+				<p className={styles.titleText}>Для просмотра каталога войдите в аккаунт</p>
 				<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 					<div className={styles.inputGroup}>
 						<input

@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchMe } from './store/authActions';
+import { fetchMe } from './store/index';
 import { Toaster } from 'react-hot-toast';
 import { Header, RequireAuth } from './components';
 import {
