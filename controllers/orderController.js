@@ -3,43 +3,34 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const ApiError = require("../utils/api-error");
 
-exports.createOrder = async (req, res, next) => {
+// Создать новую заявку на покупку/аренду
+const createOrder = async (req, res, next) => {
   try {
     const { productId, contactEmail, type, comment } = req.body;
 
-    // проверка авторизации
     if (!req.user || !req.user.userId) {
-      return next(ApiError.unauthorized("Unauthorized"));
+      return next(ApiError.unauthorized("Пользователь не авторизован"));
     }
 
-    // проверка productId
-    if (!productId) {
-      return next(ApiError.badRequest("ProductId is required"));
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return next(
+        ApiError.badRequest("Некорректный или отсутствующий ID товара"),
+      );
     }
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      return next(ApiError.badRequest("Invalid productId"));
-    }
-
-    // проверка существования продукта
     const product = await Product.findById(productId);
     if (!product) {
-      return next(ApiError.badRequest("Product not found"));
+      return next(ApiError.notFound("Оборудование не найдено в каталоге"));
     }
 
-    // проверка типа заявки
     const allowedTypes = ["Purchase", "Rent"];
     if (!allowedTypes.includes(type)) {
-      return next(ApiError.badRequest("Invalid order type"));
-    }
-
-    if (!contactEmail) {
-      return next(ApiError.badRequest("Email is required"));
+      return next(ApiError.badRequest("Недопустимый тип услуги"));
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(contactEmail)) {
-      return next(ApiError.badRequest("Invalid email"));
+    if (!contactEmail || !emailRegex.test(contactEmail)) {
+      return next(ApiError.badRequest("Укажите корректный контактный email"));
     }
 
     const order = new Order({
@@ -51,20 +42,17 @@ exports.createOrder = async (req, res, next) => {
     });
 
     await order.save();
-
-    res.status(201).json({
-      message: "Order created",
-      order,
-    });
+    res.status(201).json({ message: "Заявка успешно создана", order });
   } catch (e) {
     next(ApiError.internal(e.message));
   }
 };
 
-exports.getMyOrders = async (req, res, next) => {
+// Получить список личных заявок текущего пользователя
+const getMyOrders = async (req, res, next) => {
   try {
     if (!req.user || !req.user.userId) {
-      return next(ApiError.unauthorized("Unauthorized"));
+      return next(ApiError.unauthorized("Пользователь не авторизован"));
     }
 
     const orders = await Order.find({ userId: req.user.userId })
@@ -75,4 +63,9 @@ exports.getMyOrders = async (req, res, next) => {
   } catch (err) {
     next(ApiError.internal(err.message));
   }
+};
+
+module.exports = {
+  createOrder,
+  getMyOrders,
 };

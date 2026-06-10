@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const ApiError = require("../utils/api-error");
 
-// Получить ВСЕ заявки (для админа)
+// Получить все заявки в системе (сортировка по новизне)
 const getAllOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
@@ -16,33 +16,31 @@ const getAllOrders = async (req, res, next) => {
   }
 };
 
-// Изменить статус заявки
+// Изменить статус текущей заявки
 const updateOrderStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
 
-    // проверка id
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(ApiError.badRequest("Invalid order id"));
+      return next(ApiError.badRequest("Неверный формат ID заявки"));
     }
 
-    // допустимые статусы
     const allowedStatuses = ["new", "in_progress", "done", "rejected"];
     if (!allowedStatuses.includes(status)) {
-      return next(ApiError.badRequest("Invalid status value"));
+      return next(ApiError.badRequest("Передан некорректный статус заявки"));
     }
 
     const order = await Order.findById(id);
     if (!order) {
-      return next(ApiError.notFound("Order not found"));
+      return next(ApiError.notFound("Заявка не найдена"));
     }
 
     order.status = status;
     await order.save();
 
     res.json({
-      message: "Статус обновлен",
+      message: "Статус успешно обновлен",
       order,
     });
   } catch (err) {
@@ -50,23 +48,22 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
-// Удалить заявку
+// Удалить заявку из системы
 const deleteOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(ApiError.badRequest("Invalid order id"));
+      return next(ApiError.badRequest("Неверный формат ID заявки"));
     }
 
     const order = await Order.findById(id);
     if (!order) {
-      return next(ApiError.notFound("Order not found"));
+      return next(ApiError.notFound("Заявка не найдена"));
     }
 
     await order.deleteOne();
-
-    res.json({ message: "Заявка удалена" });
+    res.json({ message: "Заявка успешно удалена" });
   } catch (err) {
     next(ApiError.internal(err.message));
   }
