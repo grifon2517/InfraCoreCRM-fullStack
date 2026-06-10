@@ -1,39 +1,42 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const ApiError = require("../utils/api-error");
 
 const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    // нет заголовка
     if (!authHeader) {
-      return res
-        .status(401)
-        .json({ message: "No token, authorization denied" });
+      return next(
+        ApiError.unauthorized("Доступ запрещен: отсутствует токен авторизации"),
+      );
     }
 
-    // неправильный формат
     if (!authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Invalid token format" });
+      return next(
+        ApiError.unauthorized("Некорректный формат токена авторизации"),
+      );
     }
 
     const token = authHeader.split(" ")[1];
-
     if (!token) {
-      return res.status(401).json({ message: "Token missing" });
+      return next(ApiError.unauthorized("Токен авторизации не найден"));
     }
 
-    // проверяем JWT
+    // Верификация JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // ищем пользователя в базе
+    // Проверка существования пользователя в базе данных
     const user = await User.findById(decoded.userId);
-
     if (!user) {
-      return res.status(401).json({ message: "User not found" });
+      return next(
+        ApiError.unauthorized(
+          "Пользователь, связанный с этим токеном, не найден",
+        ),
+      );
     }
 
-    // кладем в req.user только то, что реально в базе
+    // Записываем в объект запроса только проверенные данные
     req.user = {
       userId: user._id,
       role: user.role,
@@ -41,8 +44,10 @@ const authMiddleware = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.error(err);
-    return res.status(401).json({ message: "Token is not valid" });
+    console.error("Ошибка аутентификации:", err);
+    return next(
+      ApiError.unauthorized("Предоставлен невалидный или просроченный токен"),
+    );
   }
 };
 

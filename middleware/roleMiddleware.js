@@ -1,9 +1,14 @@
+const ApiError = require("../utils/api-error");
+
 const roleMiddleware = (roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res
-        .status(403)
-        .json({ message: "Access denied: insufficient role" });
+    // Безопасный разбор ролей через опциональную цепочку
+    if (!req.user || !roles.includes(req.user.role)) {
+      return next(
+        ApiError.forbidden(
+          "Доступ запрещен: недостаточно прав для этого действия",
+        ),
+      );
     }
     next();
   };
