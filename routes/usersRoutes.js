@@ -1,10 +1,14 @@
 const express = require("express");
 const router = express.Router();
+
 const authMiddleware = require("../middleware/authMiddleware");
-const roleMiddleware = require("../middleware/roleMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware"); // Стандартизировали middleware защиты роли
 const { getUsers, deleteUser } = require("../controllers/userController");
 
-router.get("/", authMiddleware, roleMiddleware(["admin"]), getUsers);
-router.delete("/:id", authMiddleware, roleMiddleware(["admin"]), deleteUser);
+// Управление учетными записями пользователей доступно строго администраторам
+router.use(authMiddleware, adminMiddleware);
+
+router.get("/", getUsers);
+router.delete("/:id", deleteUser);
 
 module.exports = router;

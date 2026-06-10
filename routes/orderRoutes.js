@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { createOrder, getMyOrders } = require("../controllers/orderController");
-const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/", authMiddleware, createOrder);
-router.get("/my", authMiddleware, getMyOrders);
+const authMiddleware = require("../middleware/authMiddleware");
+const { createOrder, getMyOrders } = require("../controllers/orderController");
+
+// Все заявки требуют обязательной авторизации пользователя
+router.use(authMiddleware);
+
+router.post("/", createOrder);
+router.get("/my", getMyOrders);
 
 module.exports = router;

@@ -90,7 +90,23 @@ const login = async (req, res, next) => {
   }
 };
 
+const getMe = async (req, res, next) => {
+  try {
+    // req.user.userId берется из предварительно отработавшего authMiddleware
+    const user = await User.findById(req.user.userId).select("login role");
+
+    if (!user) {
+      return next(ApiError.notFound("Пользователь не найден в системе"));
+    }
+
+    res.json(user);
+  } catch (err) {
+    next(ApiError.internal(err.message));
+  }
+};
+
 module.exports = {
   register,
   login,
+  getMe,
 };

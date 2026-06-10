@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const {
   getProducts,
   getProductById,
@@ -12,15 +13,11 @@ const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const upload = require("../middleware/uploadMiddleware");
 
-// ==========================================
-// Публичные роуты (доступны покупателям и гостям)
-// ==========================================
+// Публичные роуты каталога (доступны клиентам и гостям платформы)
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 
-// ==========================================
-// Админские роуты (только для админа)
-// ==========================================
+// Административная часть управления оборудованием ЦОД
 router.post(
   "/",
   authMiddleware,
@@ -38,16 +35,3 @@ router.put(
 router.delete("/:id", authMiddleware, adminMiddleware, deleteProduct);
 
 module.exports = router;
-
-// const express = require("express");
-// const router = express.Router();
-// const {
-//   getProducts,
-//   getProductById,
-// } = require("../controllers/productController");
-// const authMiddleware = require("../middleware/authMiddleware");
-
-// router.get("/", authMiddleware, getProducts);
-// router.get("/:id", authMiddleware, getProductById);
-
-// module.exports = router;
