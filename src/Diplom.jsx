@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchMe } from './store/index';
-import { Toaster } from 'react-hot-toast';
-import { Header, RequireAuth } from './components';
+import { AUTH_FINISH_LOADING } from './store/action-types';
+
+import { Header, RequireAuth, MyToaster, Loader } from './components';
 import {
-	AdminPage,
 	Login,
 	ProductsPage,
 	ProductPage,
@@ -22,54 +22,34 @@ import './App.css';
 function Diplom() {
 	const dispatch = useDispatch();
 
+	const { loading } = useSelector((state) => state.auth);
+
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 
 		if (token) {
 			dispatch(fetchMe());
 		} else {
-			dispatch({ type: 'AUTH_FINISH_LOADING' });
+			dispatch({ type: AUTH_FINISH_LOADING });
 		}
 	}, [dispatch]);
+
+	if (loading) {
+		return <Loader />;
+	}
+
 	return (
 		<>
-			<Toaster
-				position="top-right"
-				toastOptions={{
-					duration: 4000,
-					style: {
-						background: '#1e1e1e',
-						color: '#fff',
-						borderRadius: '12px',
-						padding: '14px 16px',
-						fontSize: '14px',
-					},
-					success: {
-						iconTheme: {
-							primary: '#4ade80',
-							secondary: '#1e1e1e',
-						},
-					},
-					error: {
-						iconTheme: {
-							primary: '#ef4444',
-							secondary: '#1e1e1e',
-						},
-					},
-				}}
-			/>
+			<MyToaster />
 			<Header />
 
 			<main className="main-content">
 				<Routes>
-					{/* Публичные страницы */}
 					<Route path="/" element={<HomePage />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/product/:id" element={<ProductPage />} />
-					<Route path="/order/:id" element={<div>Страница заявки</div>} />
 
-					{/* Приватные страницы пользователя */}
 					<Route
 						path="/products"
 						element={
@@ -87,7 +67,6 @@ function Diplom() {
 						}
 					/>
 
-					{/* СТРОГО АДМИНСКИЕ СТРАНИЦЫ (С МАСКИРОВКОЙ ПОД 404) */}
 					<Route
 						path="/orders"
 						element={
@@ -104,7 +83,6 @@ function Diplom() {
 							</RequireAuth>
 						}
 					/>
-					{/* ИСПРАВЛЕНО: Теперь список пользователей тоже под железным замком админа! */}
 					<Route
 						path="/users"
 						element={
@@ -114,7 +92,6 @@ function Diplom() {
 						}
 					/>
 
-					{/* ГЛОБАЛЬНЫЙ ОТЛОВ ВСЕХ ОШИБОК И НЕСУЩЕСТВУЮЩИХ СТРАНИЦ */}
 					<Route path="*" element={<NotFoundPage />} />
 				</Routes>
 			</main>
