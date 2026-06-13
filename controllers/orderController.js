@@ -3,7 +3,6 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const ApiError = require("../utils/api-error");
 
-// Создать новую заявку на покупку/аренду
 const createOrder = async (req, res, next) => {
   try {
     const { productId, contactEmail, type, comment } = req.body;
@@ -48,7 +47,6 @@ const createOrder = async (req, res, next) => {
   }
 };
 
-// Получить список личных заявок текущего пользователя
 const getMyOrders = async (req, res, next) => {
   try {
     if (!req.user || !req.user.userId) {

@@ -23,10 +23,8 @@ const authMiddleware = async (req, res, next) => {
       return next(ApiError.unauthorized("Токен авторизации не найден"));
     }
 
-    // Верификация JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Проверка существования пользователя в базе данных
     const user = await User.findById(decoded.userId);
     if (!user) {
       return next(
@@ -36,7 +34,6 @@ const authMiddleware = async (req, res, next) => {
       );
     }
 
-    // Записываем в объект запроса только проверенные данные
     req.user = {
       userId: user._id,
       role: user.role,

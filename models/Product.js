@@ -20,7 +20,7 @@ const ProductSchema = new mongoose.Schema(
       default: 0,
     },
     features: {
-      type: String, // Или Array, если планируешь передавать массивом
+      type: String,
       default: "",
     },
     image: {

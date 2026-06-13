@@ -13,11 +13,9 @@ const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 const upload = require("../middleware/uploadMiddleware");
 
-// Публичные роуты каталога (доступны клиентам и гостям платформы)
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 
-// Административная часть управления оборудованием ЦОД
 router.post(
   "/",
   authMiddleware,

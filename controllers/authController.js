@@ -5,7 +5,6 @@ const ApiError = require("../utils/api-error");
 
 const LOGIN_REGEX = /^[a-zA-Z0-9_]+$/;
 
-// Регистрация нового аккаунта
 const register = async (req, res, next) => {
   try {
     const { login, password } = req.body;
@@ -35,7 +34,6 @@ const register = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Безопасность: Роль принудительно выставляется сервером, игнорируя req.body
     const user = new User({
       login,
       password: hashedPassword,
@@ -49,7 +47,6 @@ const register = async (req, res, next) => {
   }
 };
 
-// Вход в систему (Аутентификация)
 const login = async (req, res, next) => {
   try {
     const { login, password } = req.body;
@@ -59,7 +56,7 @@ const login = async (req, res, next) => {
     }
 
     const user = await User.findOne({ login });
-    // БЕЗОПАСНОСТЬ: Одинаковая ошибка для скрытия существования логина в бд
+
     if (!user) {
       throw ApiError.badRequest("Неверный логин или пароль");
     }
@@ -69,7 +66,6 @@ const login = async (req, res, next) => {
       throw ApiError.badRequest("Неверный логин или пароль");
     }
 
-    // Генерация JWT токена
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -92,7 +88,6 @@ const login = async (req, res, next) => {
 
 const getMe = async (req, res, next) => {
   try {
-    // req.user.userId берется из предварительно отработавшего authMiddleware
     const user = await User.findById(req.user.userId).select("login role");
 
     if (!user) {

@@ -9,7 +9,6 @@ const {
   deleteOrder,
 } = require("../controllers/adminOrdersController");
 
-// Внедряем сквозную защиту на уровне роутера для всех нижележащих путей
 router.use(authMiddleware, adminMiddleware);
 
 router.get("/orders", getAllOrders);

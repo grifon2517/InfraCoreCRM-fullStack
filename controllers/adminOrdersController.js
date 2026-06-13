@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const ApiError = require("../utils/api-error");
 
-// Получить все заявки в системе (сортировка по новизне)
 const getAllOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
@@ -16,7 +15,6 @@ const getAllOrders = async (req, res, next) => {
   }
 };
 
-// Изменить статус текущей заявки
 const updateOrderStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -26,7 +24,7 @@ const updateOrderStatus = async (req, res, next) => {
       return next(ApiError.badRequest("Неверный формат ID заявки"));
     }
 
-    const allowedStatuses = ["new", "in_progress", "done", "rejected"];
+    const allowedStatuses = ["Новая", "В работе", "Выполнена", "Отклонена"];
     if (!allowedStatuses.includes(status)) {
       return next(ApiError.badRequest("Передан некорректный статус заявки"));
     }
@@ -48,7 +46,6 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
-// Удалить заявку из системы
 const deleteOrder = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -15,7 +15,7 @@ const OrderSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: ["Purchase", "Rent"],
-      required: true, // Защита: тип сделки должен быть определен всегда
+      required: true,
     },
     contactEmail: {
       type: String,
@@ -28,7 +28,7 @@ const OrderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["new", "in_progress", "done", "rejected"],
+      enum: ["Новая", "В работе", "Выполнена", "Отклонена"],
       default: "new",
     },
   },

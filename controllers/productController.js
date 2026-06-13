@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const ApiError = require("../utils/api-error");
 
-// Получить список всех товаров каталога
 const getProducts = async (req, res, next) => {
   try {
     const products = await Product.find();
@@ -12,7 +11,6 @@ const getProducts = async (req, res, next) => {
   }
 };
 
-// Получить детальную карточку оборудования по ID
 const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -31,10 +29,9 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-// Создать новый товар (доступно только админу)
 const createProduct = async (req, res, next) => {
   try {
-    const { title, description, price, features } = req.body;
+    const { title, shortDescription, description, price, features } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : "";
 
     if (!title || !description) {
@@ -45,6 +42,7 @@ const createProduct = async (req, res, next) => {
 
     const newProduct = new Product({
       title,
+      shortDescription,
       description,
       price,
       features,
@@ -58,7 +56,6 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-// Изменить характеристики товара
 const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -66,8 +63,8 @@ const updateProduct = async (req, res, next) => {
       return next(ApiError.badRequest("Неверный формат ID оборудования"));
     }
 
-    const { title, description, price, features } = req.body;
-    let updateData = { title, description, price, features };
+    const { title, shortDescription, description, price, features } = req.body;
+    let updateData = { title, shortDescription, description, price, features };
 
     if (req.file) {
       updateData.image = `/uploads/${req.file.filename}`;
@@ -87,7 +84,6 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-// Удалить товар из базы
 const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;

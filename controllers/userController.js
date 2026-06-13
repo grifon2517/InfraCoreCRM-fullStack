@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const ApiError = require("../utils/api-error");
 
-// Получить всех пользователей системы (кроме их хэшей паролей)
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
@@ -11,7 +10,6 @@ const getUsers = async (req, res, next) => {
   }
 };
 
-// Удалить пользователя
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -27,7 +25,6 @@ const deleteUser = async (req, res, next) => {
       return next(ApiError.notFound("Пользователь не найден"));
     }
 
-    // Защита: Бизнес-логика запрещает удаление корневых администраторов
     if (user.role === "admin") {
       return next(
         ApiError.badRequest("Невозможно удалить аккаунт администратора"),
