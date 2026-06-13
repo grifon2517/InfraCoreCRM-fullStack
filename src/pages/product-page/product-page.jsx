@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import api from '../../api/api';
 import { Loader, Button } from '../../components';
 import { useFetch } from '../../hooks/useFetch';
@@ -57,14 +57,23 @@ export function ProductPage() {
 				navigate('/claims');
 			}, 1000);
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка при создании заявки:', err);
 			setErrors({ server: 'Ошибка при создании заявки' });
 		} finally {
 			setOrderLoading(false);
 		}
 	};
 
+	const getProductImageUrl = (image) => {
+		if (!image) return '/placeholder.jpg';
+		if (image.includes('uploads')) {
+			return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
+		}
+		return image;
+	};
+
 	if (pageLoading) return <Loader />;
+
 	if (!product) {
 		return <p className={styles.notFound}>Продукт не найден</p>;
 	}
@@ -75,13 +84,7 @@ export function ProductPage() {
 
 			<div className={styles.imageWrap}>
 				<img
-					src={
-						product.image
-							? product.image.includes('uploads')
-								? `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image}`
-								: product.image
-							: '/placeholder.jpg'
-					}
+					src={getProductImageUrl(product.image)}
 					alt={product.title}
 					className={styles.image}
 				/>
@@ -94,7 +97,6 @@ export function ProductPage() {
 
 				<p className={styles.label}>Выберите тип услуги:</p>
 				<div className={styles.serviceGroup}>
-					{/* Заменили на нативные button, чтобы стили CSS-модуля применились железно */}
 					<button
 						type="button"
 						className={`${styles.typeBtn} ${type === 'Purchase' ? styles.activeType : ''}`}
@@ -133,12 +135,7 @@ export function ProductPage() {
 					/>
 				</div>
 
-				{/* Для главной кнопки отправки оставляем твой Button */}
-				<Button
-					onClick={handleCreateOrder}
-					className={styles.submitBtn}
-					loading={orderLoading}
-				>
+				<Button onClick={handleCreateOrder} loading={orderLoading}>
 					Оформить заявку
 				</Button>
 

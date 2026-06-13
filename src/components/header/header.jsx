@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../../store/auth-actions';
+import { logout } from '../../store';
 import { Logo } from '../logo/logo';
-import styles from './header.module.css'; // Подключаем наши модульные стили
+import styles from './header.module.css';
 
 export const Header = () => {
 	const { isAuth, user } = useSelector((state) => state.auth);
@@ -18,25 +18,21 @@ export const Header = () => {
 
 	return (
 		<header className={styles.header}>
-			{/* LEFT СЕКЦИЯ — ЛОГОТИП И КАТАЛОГ */}
 			<div className={styles.leftSection}>
 				<Link to="/" className={styles.logoLink}>
 					<Logo />
 				</Link>
-				{/* МЕНЯЕМ ТУТ: вместо "/admin/products" ставим {productsPath} */}
+
 				<Link to={productsPath} className={styles.catalogBtn}>
 					Товары
 				</Link>
 			</div>
 
-			{/* CENTER СЕКЦИЯ — ИДЕАЛЬНО ОТЦЕНТРОВАННЫЙ ЗАГОЛОВОК С ГРАДИЕНТОМ */}
 			<Link to="/" className={styles.centerTitle}>
 				InfraCore<span className={styles.titleAccent}>CRM</span>
 			</Link>
 
-			{/* RIGHT СЕКЦИЯ — НАВИГАЦИЯ И АВТОРИЗАЦИЯ */}
 			<div className={styles.rightSection}>
-				{/* 1. Если пользователь ГОСТЬ */}
 				{!isAuth && (
 					<>
 						<Link to="/login" className={styles.navLink}>
@@ -48,7 +44,6 @@ export const Header = () => {
 					</>
 				)}
 
-				{/* 2. Если залогинен ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ */}
 				{isAuth && user?.role === 'user' && (
 					<>
 						<Link to="/claims" className={styles.navLink}>
@@ -61,7 +56,6 @@ export const Header = () => {
 					</>
 				)}
 
-				{/* 3. Если залогинен АДМИНИСТРАТОР */}
 				{isAuth && user?.role === 'admin' && (
 					<>
 						<Link to="/orders" className={styles.navLink}>

@@ -1,14 +1,15 @@
-import { useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import api from '../../api/api';
-import { Button } from '../../components'; // Добавили твой Button
-import styles from '../auth.module.css'; // Тот же самый файл стилей
+import { AUTH_SUCCESS } from '../../store/action-types';
+import { Button } from '../../components';
+import styles from '../auth.module.css';
 
-// Исправленная схема валидации (одинаковая с логином)
 const schema = yup.object().shape({
 	login: yup
 		.string()
@@ -21,7 +22,7 @@ const schema = yup.object().shape({
 		.string()
 		.required('Пароль обязателен')
 		.min(6, 'Минимум 6 символов')
-		.max(30, 'Максимум 30 символов'), // Добавили макс. длину
+		.max(30, 'Максимум 30 символов'),
 });
 
 export function RegisterPage() {
@@ -48,14 +49,16 @@ export function RegisterPage() {
 			const me = await api.get('/auth/me');
 
 			dispatch({
-				type: 'AUTH_SUCCESS',
+				type: AUTH_SUCCESS,
 				payload: me.data,
 			});
 
 			toast.success('Регистрация успешна');
 			navigate('/products');
 		} catch (err) {
+			console.error('Ошибка регистрации:', err);
 			const msg = err.response?.data?.message || 'Ошибка регистрации';
+
 			setError('password', {
 				type: 'server',
 				message: msg,
@@ -76,9 +79,7 @@ export function RegisterPage() {
 							placeholder="Логин"
 							{...register('login')}
 						/>
-						<span className={styles.errorText}>
-							{errors.login ? errors.login.message : ''}
-						</span>
+						<span className={styles.errorText}>{errors.login?.message || ''}</span>
 					</div>
 
 					<div className={styles.inputGroup}>
@@ -88,27 +89,20 @@ export function RegisterPage() {
 							placeholder="Пароль"
 							{...register('password')}
 						/>
-						<span className={styles.errorText}>
-							{errors.password ? errors.password.message : ''}
-						</span>
+						<span className={styles.errorText}>{errors.password?.message || ''}</span>
 					</div>
 
-					<Button
-						className={styles.submitBtn}
-						type="submit"
-						disabled={!isValid || isSubmitting}
-					>
-						{isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
+					<Button type="submit" disabled={!isValid} loading={isSubmitting}>
+						Зарегистрироваться
 					</Button>
 				</form>
 
 				<div className={styles.footer}>
 					<p>Уже есть аккаунт?</p>
-					<Link to="/login" style={{ textDecoration: 'none' }}>
-						<Button className={styles.submitBtn} type="button">
-							Войти
-						</Button>
-					</Link>
+
+					<Button as="link" to="/login" variant="secondary">
+						Войти
+					</Button>
 				</div>
 			</div>
 		</div>

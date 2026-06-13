@@ -7,7 +7,6 @@ import { useModal } from '../../../hooks';
 import styles from './admin-orders-page.module.css';
 
 export const AdminOrdersPage = () => {
-	// Возвращаем проверенные стейты
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [selectedOrder, setSelectedOrder] = useState(null);
@@ -15,14 +14,13 @@ export const AdminOrdersPage = () => {
 	const { isOpen, open, close } = useModal();
 	const [orderToDelete, setOrderToDelete] = useState(null);
 
-	// Твоя родная функция загрузки, которая точно знает правильный URL бэкенда
 	const fetchOrders = async () => {
 		try {
 			setLoading(true);
 			const res = await getAllOrders();
 			setOrders(res.data);
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка при получении заявок:', err);
 			toast.error('Ошибка загрузки заявок');
 		} finally {
 			setLoading(false);
@@ -34,21 +32,19 @@ export const AdminOrdersPage = () => {
 	}, []);
 
 	const handleStatusChange = async (id, status) => {
-		// Оптимистично обновляем статус в интерфейсе, чтобы всё реагировало мгновенно
 		setOrders((prev) => prev.map((order) => (order._id === id ? { ...order, status } : order)));
 
 		try {
 			await updateOrderStatus(id, status);
 			toast.success('Статус обновлён');
 
-			// Если открыта модалка детального просмотра, обновляем статус и там
 			if (selectedOrder && selectedOrder._id === id) {
 				setSelectedOrder((prev) => ({ ...prev, status }));
 			}
 		} catch (err) {
-			console.error(err);
-			fetchOrders(); // Если бэк упал — откатываемся на актуальные данные
-			toast.error('Ошибка обновления');
+			console.error('Ошибка изменения статуса:', err);
+			fetchOrders();
+			toast.error('Ошибка обновления статуса');
 		}
 	};
 
@@ -57,6 +53,7 @@ export const AdminOrdersPage = () => {
 		open();
 	};
 
+	// Подтверждение удаления заявки в модальном окне
 	const confirmOrderDelete = async () => {
 		if (!orderToDelete) return;
 
@@ -65,7 +62,8 @@ export const AdminOrdersPage = () => {
 			setOrders((prev) => prev.filter((order) => order._id !== orderToDelete));
 			toast.success('Заявка удалена');
 			setSelectedOrder(null);
-		} catch {
+		} catch (err) {
+			console.error('Ошибка удаления заявки:', err);
 			toast.error('Ошибка удаления');
 		} finally {
 			close();
@@ -73,9 +71,9 @@ export const AdminOrdersPage = () => {
 	};
 
 	const getStatusClass = (status) => {
-		if (status === 'new') return styles.statusNew;
-		if (status === 'in_progress') return styles.statusProgress;
-		if (status === 'done') return styles.statusDone;
+		if (status === 'Новая') return styles.statusNew;
+		if (status === 'В работе') return styles.statusProgress;
+		if (status === 'Выполнена') return styles.statusDone;
 		return '';
 	};
 

@@ -1,13 +1,11 @@
-import { useState } from 'react';
-import { useFetch } from '../../../hooks';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import api from '../../../api/api';
-import { Button, ConfirmModal, Loader } from '../../../components';
-import { useModal } from '../../../hooks';
-import styles from './admin-users-page.module.css'; // Импортируем стили
+import { ConfirmModal, Loader } from '../../../components';
+import { useModal, useFetch } from '../../../hooks';
+import styles from './admin-users-page.module.css';
 
 export const UserPage = () => {
-	// 1. Избавились от useEffect и ручных стейтов загрузки.
-	// Предполагаем, что useFetch возвращает { data, loading, refetch }
 	const { data: userList, loading, refetch } = useFetch('/users', []);
 
 	const { isOpen, open, close } = useModal();
@@ -23,13 +21,13 @@ export const UserPage = () => {
 
 		try {
 			await api.delete(`/users/${userToDelete}`);
-
-			// 2. Вместо ручной фильтрации просто обновляем данные с бэкенда
+			toast.success('Пользователь успешно удален');
 			refetch();
-
-			close();
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка при удалении пользователя:', err);
+			toast.error(err.response?.data?.message || 'Ошибка при удалении пользователя');
+		} finally {
+			close();
 		}
 	};
 
@@ -83,7 +81,6 @@ export const UserPage = () => {
 			</div>
 
 			<ConfirmModal
-				className={styles.confirmModal}
 				isOpen={isOpen}
 				onClose={close}
 				onConfirm={confirmDelete}

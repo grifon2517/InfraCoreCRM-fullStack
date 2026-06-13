@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../../api/api';
 import { Loader, ConfirmModal } from '../../../components';
@@ -32,7 +32,7 @@ export const AdminProductsPage = () => {
 				setProducts((prev) =>
 					prev.map((p) => (p._id === currentProduct._id ? res.data : p)),
 				);
-				toast.success('Товар обновлен');
+				toast.success('Данные товара обновлены');
 			} else {
 				const res = await api.post('/products', formData);
 				setProducts((prev) => [...prev, res.data]);
@@ -40,7 +40,7 @@ export const AdminProductsPage = () => {
 			}
 			formModal.close();
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка при сохранении товара:', err);
 			toast.error('Ошибка сохранения товара');
 		}
 	};
@@ -50,25 +50,33 @@ export const AdminProductsPage = () => {
 		deleteModal.open();
 	};
 
+	// Подтверждение удаления товара
 	const confirmProductDelete = async () => {
 		if (!productToDelete) return;
 		try {
 			await api.delete(`/products/${productToDelete}`);
 			setProducts((prev) => prev.filter((p) => p._id !== productToDelete));
-			toast.success('Товар deleted');
+			toast.success('Товар удален');
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка при удалении товара:', err);
 			toast.error('Ошибка удаления');
 		} finally {
 			deleteModal.close();
 		}
 	};
 
+	const getProductImageUrl = (image) => {
+		if (!image) return '/placeholder.jpg';
+		if (image.includes('uploads')) {
+			return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
+		}
+		return image;
+	};
+
 	if (loading) return <Loader />;
 
 	return (
 		<div className={styles.container}>
-			{/* Наш новый аккуратный верхний блок */}
 			<div className={styles.header}>
 				<h2 className={styles.pageTitle}>Управление оборудованием</h2>
 				<button type="button" className={styles.createBtn} onClick={handleCreateClick}>
@@ -79,7 +87,6 @@ export const AdminProductsPage = () => {
 			{products.length === 0 ? (
 				<h3 className={styles.emptyTitle}>Товаров пока нет</h3>
 			) : (
-				/* Карточка-обертка для таблицы */
 				<div className={styles.tableCard}>
 					<table className={styles.table}>
 						<thead>
@@ -95,20 +102,13 @@ export const AdminProductsPage = () => {
 								<tr key={product._id} className={styles.row}>
 									<td>
 										<img
-											src={
-												product.image
-													? product.image.includes('uploads')
-														? `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image}`
-														: product.image
-													: '/placeholder.jpg'
-											}
+											src={getProductImageUrl(product.image)} // Чистый вызов вместо трех этажей тернарников
 											alt={product.title}
 											className={styles.imgPreview}
 										/>
 									</td>
 									<td className={styles.productTitle}>{product.title}</td>
 									<td>
-										{/* Обертка, которая укрощает длинный текст */}
 										<div className={styles.descWrapper}>
 											{product.description}
 										</div>

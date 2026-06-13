@@ -90,7 +90,6 @@
 	resize: vertical;
 }
 
-/* КРАСИВАЯ КАСТОМИЗАЦИЯ ЗАГРУЗКИ ФАЙЛА */
 .fileUploadContainer {
 	display: flex;
 	align-items: center;

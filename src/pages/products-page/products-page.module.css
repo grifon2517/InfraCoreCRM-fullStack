@@ -13,12 +13,11 @@
 	text-align: left;
 }
 
-/* ВКЛЮЧАЕМ СЕТКУ ДЛЯ КАРТОЧЕК */
 .grid {
 	display: grid;
-	/* Карточки будут автоматически выстраиваться в ряд, пока их ширина не станет меньше 300px */
+
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 30px; /* Отступы между карточками во все стороны */
+	gap: 30px;
 	width: 100%;
 }
 

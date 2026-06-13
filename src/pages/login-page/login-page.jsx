@@ -1,4 +1,5 @@
-import { useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,9 +7,9 @@ import * as yup from 'yup';
 import toast from 'react-hot-toast';
 import api from '../../api/api';
 import { Button } from '../../components';
-import styles from '../auth.module.css'; // Подключаем наши стили
+import { AUTH_SUCCESS } from '../../store/action-types';
+import styles from '../auth.module.css';
 
-// Единая схема валидации
 const schema = yup.object().shape({
 	login: yup
 		.string()
@@ -46,15 +47,16 @@ export function Login() {
 			const me = await api.get('/auth/me');
 
 			dispatch({
-				type: 'AUTH_SUCCESS',
+				type: AUTH_SUCCESS,
 				payload: me.data,
 			});
 
 			toast.success('Добро пожаловать');
 			navigate('/products');
 		} catch (err) {
-			console.error(err);
+			console.error('Ошибка авторизации:', err);
 			const message = err.response?.data?.message || 'Ошибка сервера';
+
 			setError('password', {
 				type: 'server',
 				message: message,
@@ -68,6 +70,7 @@ export function Login() {
 			<div className={styles.card}>
 				<h2 className={styles.title}>Вход в систему</h2>
 				<p className={styles.titleText}>Для просмотра каталога войдите в аккаунт</p>
+
 				<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 					<div className={styles.inputGroup}>
 						<input
@@ -75,10 +78,7 @@ export function Login() {
 							{...register('login')}
 							placeholder="Логин"
 						/>
-						{/* Место под ошибку всегда забронировано */}
-						<span className={styles.errorText}>
-							{errors.login ? errors.login.message : ''}
-						</span>
+						<span className={styles.errorText}>{errors.login?.message || ''}</span>
 					</div>
 
 					<div className={styles.inputGroup}>
@@ -88,28 +88,20 @@ export function Login() {
 							{...register('password')}
 							placeholder="Пароль"
 						/>
-						<span className={styles.errorText}>
-							{errors.password ? errors.password.message : ''}
-						</span>
+						<span className={styles.errorText}>{errors.password?.message || ''}</span>
 					</div>
 
-					<Button
-						className={styles.submitBtn}
-						type="submit"
-						disabled={!isValid || isSubmitting}
-					>
-						{isSubmitting ? 'Вход...' : 'Войти'}
+					<Button type="submit" disabled={!isValid} loading={isSubmitting}>
+						Войти
 					</Button>
 				</form>
 
 				<div className={styles.footer}>
 					<p>Нет аккаунта?</p>
-					{/* Link из react-router-dom для плавно перехода */}
-					<Link to="/register" style={{ textDecoration: 'none' }}>
-						<Button className={styles.submitBtn} type="button">
-							Регистрация
-						</Button>
-					</Link>
+
+					<Button as="link" to="/register" variant="secondary">
+						Регистрация
+					</Button>
 				</div>
 			</div>
 		</div>

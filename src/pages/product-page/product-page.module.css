@@ -1,7 +1,7 @@
 .container {
 	max-width: 850px;
 	margin: 0 auto 60px auto;
-	padding: 80px 24px 0 24px; /* Надежная защита от наезда нашей новой шапки */
+	padding: 80px 24px 0 24px;
 	color: #e1e3e6;
 }
 
@@ -13,7 +13,6 @@
 	text-align: left;
 }
 
-/* Обертка для большой картинки товара */
 .imageWrap {
 	width: 100%;
 	height: 420px;
@@ -31,22 +30,17 @@
 	object-fit: cover;
 }
 
-/* Красивое разборчивое описание спецификаций */
 .description {
 	font-size: 16px;
 	line-height: 1.6;
 	color: #b9bbbe;
 	text-align: left;
 	margin-bottom: 48px;
-	white-space: pre-line; /* Сохраняет абзацы и переносы строк */
+	white-space: pre-line;
 }
 
-/* ======================================================== */
-/* СТИЛИЗАЦИЯ КАРТОЧКИ ОФОРМЛЕНИЯ ЗАЯВКИ (orderCard) */
-/* ======================================================== */
-
 .orderCard {
-	background-color: #1a1d24; /* Наш фирменный темный графит CRM */
+	background-color: #1a1d24;
 	border: 1px solid #2c313c;
 	border-radius: 14px;
 	padding: 32px;
@@ -54,10 +48,9 @@
 	margin: 0 auto;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 
-	/* Включаем Flexbox-контейнер, чтобы раздать идеальный воздух всем элементам */
 	display: flex;
 	flex-direction: column;
-	gap: 18px; /* Равномерный отступ между всеми блоками формы */
+	gap: 18px;
 }
 
 .cardTitle {
@@ -78,12 +71,11 @@
 	text-align: left;
 }
 
-/* Контейнер кнопок Купить / Арендовать */
 .serviceGroup {
 	display: flex;
 	gap: 12px;
 	width: 100%;
-	margin-top: -4px; /* Сближаем кнопки с их лейблом */
+	margin-top: -4px;
 }
 
 .typeBtn {
@@ -104,7 +96,6 @@
 	color: #fff;
 }
 
-/* Твой класс активного выбора услуги */
 .activeType {
 	background-color: rgba(59, 130, 246, 0.1);
 	border-color: #3b82f6;
@@ -112,7 +103,6 @@
 	font-weight: 600;
 }
 
-/* Обертки для инпута и текстового поля */
 .inputGroup {
 	display: flex;
 	flex-direction: column;
@@ -120,7 +110,6 @@
 	width: 100%;
 }
 
-/* Инпут email и textarea комментария */
 .input,
 .textarea {
 	width: 100%;
@@ -136,33 +125,27 @@
 
 .input:focus,
 .textarea:focus {
-	border-color: #3b82f6; /* Синяя неоновая рамка при клике */
+	border-color: #3b82f6;
 }
 
-/* Укрощаем комментарий: даем ему отличную стартовую высоту */
 .textarea {
 	min-height: 110px;
-	resize: vertical; /* Разрешаем тянуть поле только строго вверх-вниз */
+	resize: vertical;
 }
 
-/* Дополнительный отступ для твоей главной кнопки Button */
 .submitBtn {
 	width: 100%;
-	margin-top: 10px; /* Даем кнопке ощутимый воздух снизу от комментария */
+	margin-top: 10px;
 }
-
-/* --- ВАЛИДАЦИЯ И СООБЩЕНИЯ СЕРВЕРА --- */
 
 .errorText {
 	font-size: 13px;
 	color: #ef4444;
 	text-align: left;
 	display: block;
-	margin-top: -10px; /* Прижимаем ошибку ближе к ее инпуту */
+	margin-top: -10px;
 }
 
-/* ХИТРЫЙ ТРЮК: если спаны ошибок пустые, полностью скрываем их из DOM дерева,
-   чтобы свойство gap у orderCard не плодило лишние пустые отступы */
 .errorText:empty {
 	display: none;
 }

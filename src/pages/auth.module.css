@@ -1,19 +1,17 @@
-/* Центрируем всю форму по центру экрана */
 .container {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: calc(100vh - 80px); /* Вычитаем высоту шапки, чтобы было ровно по центру */
+	min-height: calc(100vh - 80px);
 }
 
-/* Красный блок 1 со скриншота: создаем карточку */
 .card {
-	background-color: #2c2f33; /* Делаем фон чуть светлее основного фона страницы */
+	background-color: #2c2f33;
 	padding: 40px;
 	border-radius: 12px;
 	width: 100%;
 	max-width: 400px;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Легкая тень для объема */
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 	text-align: center;
 }
 
@@ -21,27 +19,25 @@
 	font-size: 28px;
 	font-weight: 700;
 	color: #ffffff;
-	text-align: center; /* ЦЕНТРИРУЕМ ЗАГОЛОВОК */
-	margin-bottom: 12px; /* Уменьшаем отступ, чтобы подружить подзаголовок с названием */
+	text-align: center;
+	margin-bottom: 12px;
 }
 
 .titleText {
-	font-size: 15px; /* Чуть уменьшаем размер, чтобы создать иерархию шрифтов */
-	color: #b9bbbe; /* Делаем цвет подписи благородно-серым, чтобы он не спорил с главным тайтлом */
-	text-align: center; /* ЦЕНТРИРУЕМ ПОДЗАГОЛОВОК */
-	margin-bottom: 32px; /* Хороший просторный отступ перед началом полей ввода */
+	font-size: 15px;
+	color: #b9bbbe;
+	text-align: center;
+	margin-bottom: 32px;
 	line-height: 1.5;
 }
 
-/* Блок 2: Форма и отступы между инпутами */
 .form {
 	display: flex;
 	flex-direction: column;
-	gap: 15px; /* Вот он, идеальный отступ между полями ввода */
+	gap: 15px;
 	margin-bottom: 25px;
 }
 
-/* Обертка для одного инпута и его ошибки */
 .inputGroup {
 	display: flex;
 	flex-direction: column;
@@ -60,15 +56,14 @@
 }
 
 .input:focus {
-	border-color: #3b82f6; /* Красивая синяя рамка при клике */
+	border-color: #3b82f6;
 }
 
-/* ГЛАВНАЯ МАГИЯ: Решаем проблему прыгающей верстки */
 .errorText {
 	color: #ff4d4f;
 	font-size: 12px;
 	margin-top: 4px;
-	min-height: 18px; /* Бронируем высоту! Даже если текста нет, место занято */
+	min-height: 18px;
 	display: block;
 }
 
@@ -79,7 +74,6 @@
 	font-size: 16px;
 }
 
-/* Отделяем нижнюю часть с ссылкой на регистрацию */
 .footer {
 	border-top: 1px solid #444;
 	padding-top: 20px;

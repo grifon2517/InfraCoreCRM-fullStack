@@ -12,7 +12,7 @@
 }
 
 .modalContent {
-	background: #1e1e1e; /* Темная тема, как у тебя в тостах */
+	background: #1e1e1e;
 	border: 1px solid #333;
 	border-radius: 12px;
 	padding: 20px;
@@ -52,19 +52,3 @@
 	flex-direction: column;
 	gap: 15px;
 }
-/* .modalOverlay {
-	position: fixed;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.6);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.modal {
-	background: #1f2937;
-	padding: 24px;
-	border-radius: 12px;
-	width: 420px;
-	color: white;
-} */

@@ -1,17 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './home-page.module.css';
 
 export function HomePage() {
-	const navigate = useNavigate();
-
-	const handleGoToCatalog = () => {
-		navigate('/products');
-	};
-
 	return (
 		<div className={styles.container}>
-			{/* 1. HERO SECTION */}
 			<section className={styles.hero}>
 				<h1 className={styles.heroTitle}>Оборудование для современных дата-центров</h1>
 				<p className={styles.heroSubtitle}>
@@ -21,15 +14,15 @@ export function HomePage() {
 					Сегодня дата-центры — это фундамент цифровой инфраструктуры. От стабильности
 					серверного оборудования зависит работа сервисов, безопасность данных и
 					масштабирование бизнеса. На нашей платформе вы можете подобрать оборудование для
-					создания или расширения собственного дата-центра: серверы, системы хранения
+					создания или расширения собственного дата-центра: серверы, systems хранения
 					данных и сопутствующую инфраструктуру.
 				</p>
-				<button type="button" className={styles.primaryBtn} onClick={handleGoToCatalog}>
+
+				<Link to="/products" className={styles.primaryBtn}>
 					Перейти в каталог
-				</button>
+				</Link>
 			</section>
 
-			{/* 2. WHAT IS AVAILABLE SECTION */}
 			<section>
 				<h2 className={styles.sectionTitle}>Что доступно на платформе</h2>
 				<div className={styles.grid}>
@@ -56,7 +49,6 @@ export function HomePage() {
 				</div>
 			</section>
 
-			{/* 3. HOW IT WORKS SECTION */}
 			<section className={styles.stepsContainer}>
 				<h2 className={styles.sectionTitle}>Как это работает</h2>
 				<div className={styles.stepsGrid}>
@@ -81,15 +73,14 @@ export function HomePage() {
 				</div>
 			</section>
 
-			{/* 4. FINAL CTA BLOCK */}
 			<section className={styles.ctaBlock}>
 				<h3 className={styles.ctaTitle}>Готовы начать?</h3>
 				<p className={styles.ctaText}>
-					Перейти в каталог и выберите оборудование для вашего проекта.
+					Перейдите в каталог и выберите оборудование для вашего проекта.
 				</p>
-				<button type="button" className={styles.primaryBtn} onClick={handleGoToCatalog}>
+				<Link to="/products" className={styles.primaryBtn}>
 					Перейти в каталог
-				</button>
+				</Link>
 			</section>
 		</div>
 	);

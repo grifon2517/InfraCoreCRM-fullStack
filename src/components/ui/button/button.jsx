@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import styles from './Button.module.css';
+import PropTypes from 'prop-types';
+import styles from './button.module.css';
 
 export function Button({
 	type = 'button',
@@ -27,3 +28,14 @@ export function Button({
 		</button>
 	);
 }
+
+Button.propTypes = {
+	type: PropTypes.oneOf(['button', 'submit', 'reset']),
+	variant: PropTypes.string,
+	disabled: PropTypes.bool,
+	loading: PropTypes.bool,
+	onClick: PropTypes.func,
+	children: PropTypes.node.isRequired,
+	to: PropTypes.string,
+	as: PropTypes.oneOf(['button', 'link']),
+};

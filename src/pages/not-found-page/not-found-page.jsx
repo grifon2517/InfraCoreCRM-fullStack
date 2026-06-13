@@ -1,10 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components';
 import styles from './not-found-page.module.css';
 
 export function NotFoundPage() {
-	const navigate = useNavigate();
-
 	return (
 		<div className={styles.container}>
 			<div className={styles.errorCard}>
@@ -13,9 +11,10 @@ export function NotFoundPage() {
 				<p className={styles.errorText}>
 					Возможно, адрес был введен неверно или страница была перемещена.
 				</p>
-				<button type="button" className={styles.homeBtn} onClick={() => navigate('/')}>
+
+				<Button as="link" to="/">
 					Вернуться на главную
-				</button>
+				</Button>
 			</div>
 		</div>
 	);

@@ -10,7 +10,7 @@
 }
 
 .modal {
-	background: #1a1d24; /* Фирменный темный графит */
+	background: #1a1d24;
 	border: 1px solid #2c313c;
 	padding: 30px;
 	border-radius: 14px;
@@ -46,7 +46,6 @@
 	color: #fff;
 }
 
-/* Стилизация строк с данными */
 .infoLine {
 	font-size: 15px;
 	margin-bottom: 12px;
@@ -59,10 +58,9 @@
 	color: #888;
 	font-weight: 500;
 	display: inline-block;
-	width: 120px; /* Выравнивает двоеточия строго друг под другом */
+	width: 120px;
 }
 
-/* Выпадающий список выбора статуса */
 .selectStatus {
 	width: 100%;
 	padding: 12px;
@@ -81,7 +79,6 @@
 	border-color: #3b82f6;
 }
 
-/* Кнопка "Удалить" */
 .deleteBtn {
 	width: 100%;
 	padding: 12px;

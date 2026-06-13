@@ -1,54 +1,57 @@
-import { Modal } from '../modal/modal'; // Укажи правильный путь к базовой модалке
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Modal } from '../modal/modal'; // Путь выверен
 import styles from './order-modal.module.css';
 
 export const OrderModal = ({ order, onClose, onStatusChange, onDelete }) => {
-	// Если клика по заявке не было, модалка спит
 	if (!order) return null;
 
 	return (
-		<div className={styles.overlay} onClick={onClose}>
-			<div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-				{/* Крестик закрытия */}
-				<button type="button" className={styles.closeCross} onClick={onClose}>
-					&times;
-				</button>
+		<Modal isOpen={!!order} onClose={onClose} title={`Заявка #${order._id.slice(-6)}`}>
+			<p className={styles.infoLine}>
+				<strong>Пользователь:</strong> {order.userId?.login || 'Гость'}
+			</p>
+			<p className={styles.infoLine}>
+				<strong>Товар:</strong> {order.productId?.title || 'Удаленный товар'}
+			</p>
+			<p className={styles.infoLine}>
+				<strong>Тип услуги:</strong> {order.type === 'Rent' ? 'Аренда' : 'Покупка'}
+			</p>
+			<p className={styles.infoLine}>
+				<strong>Комментарий:</strong> {order.comment || '—'}
+			</p>
 
-				<h3 className={styles.title}>Заявка #{order._id.slice(-6)}</h3>
+			<select
+				className={styles.selectStatus}
+				value={order.status}
+				onChange={(e) => onStatusChange(order._id, e.target.value)}
+			>
+				<option value="Новая">Новая</option>
+				<option value="В работе">В работе</option>
+				<option value="Выполнена">Выполнена</option>
+			</select>
 
-				{/* Структурированный вывод информации */}
-				<p className={styles.infoLine}>
-					<strong>Пользователь:</strong> {order.userId?.login || 'Гость'}
-				</p>
-				<p className={styles.infoLine}>
-					<strong>Товар:</strong> {order.productId?.title || 'Удаленный товар'}
-				</p>
-				<p className={styles.infoLine}>
-					<strong>Тип услуги:</strong> {order.type === 'Rent' ? 'Аренда' : 'Покупка'}
-				</p>
-				<p className={styles.infoLine}>
-					<strong>Комментарий:</strong> {order.comment || '—'}
-				</p>
-
-				{/* Кастомизированный селект изменения статуса */}
-				<select
-					className={styles.selectStatus}
-					value={order.status}
-					onChange={(e) => onStatusChange(order._id, e.target.value)}
-				>
-					<option value="new">new</option>
-					<option value="in_progress">in_progress</option>
-					<option value="done">done</option>
-				</select>
-
-				{/* Кнопка удаления заявки */}
-				<button
-					type="button"
-					className={styles.deleteBtn}
-					onClick={() => onDelete(order._id)}
-				>
-					Удалить заявку
-				</button>
-			</div>
-		</div>
+			<button type="button" className={styles.deleteBtn} onClick={() => onDelete(order._id)}>
+				Удалить заявку
+			</button>
+		</Modal>
 	);
+};
+
+OrderModal.propTypes = {
+	order: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		userId: PropTypes.shape({
+			login: PropTypes.string,
+		}),
+		productId: PropTypes.shape({
+			title: PropTypes.string,
+		}),
+		type: PropTypes.string.isRequired,
+		comment: PropTypes.string,
+		status: PropTypes.string.isRequired,
+	}),
+	onClose: PropTypes.func.isRequired,
+	onStatusChange: PropTypes.func.isRequired,
+	onDelete: PropTypes.func.isRequired,
 };

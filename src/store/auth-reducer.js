@@ -1,3 +1,5 @@
+import { AUTH_SUCCESS, AUTH_LOGOUT, AUTH_FINISH_LOADING } from './action-types';
+
 const initialState = {
 	user: null,
 	isAuth: false,
@@ -6,7 +8,7 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case 'AUTH_SUCCESS':
+		case AUTH_SUCCESS:
 			return {
 				...state,
 				user: action.payload,
@@ -14,7 +16,7 @@ export const authReducer = (state = initialState, action) => {
 				loading: false,
 			};
 
-		case 'AUTH_LOGOUT':
+		case AUTH_LOGOUT:
 			return {
 				...state,
 				user: null,
@@ -22,7 +24,7 @@ export const authReducer = (state = initialState, action) => {
 				loading: false,
 			};
 
-		case 'AUTH_FINISH_LOADING':
+		case AUTH_FINISH_LOADING:
 			return {
 				...state,
 				loading: false,

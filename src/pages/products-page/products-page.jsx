@@ -1,10 +1,9 @@
-import { useFetch } from '../../hooks/useFetch';
-import { ProductCard } from '../../components/product-card/product-card';
-import { Loader } from '../../components';
+import React from 'react';
+import { useFetch } from '../../hooks';
+import { Loader, ProductCard } from '../../components';
 import styles from './products-page.module.css';
 
 export function ProductsPage() {
-	// Вся грязная работа с загрузкой и try/catch теперь инкапсулирована тут
 	const { data: products, loading } = useFetch('/products');
 
 	if (loading) return <Loader />;
@@ -15,7 +14,7 @@ export function ProductsPage() {
 
 	return (
 		<div className={styles.wrapper}>
-			<h2 className={styles.title}>Моя продукция</h2>
+			<h2 className={styles.title}>Каталог оборудования</h2>
 
 			<div className={styles.grid}>
 				{products.map((product) => (

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../../api/api';
 import toast from 'react-hot-toast';
 import { Loader } from '../../components';
-import styles from './claims-page.module.css'; // Подключаем наш новый CSS-модуль
+import styles from './claims-page.module.css';
 
 export function ClaimsPage() {
 	const [orders, setOrders] = useState([]);
@@ -25,11 +25,10 @@ export function ClaimsPage() {
 		fetchOrders();
 	}, []);
 
-	// Вспомогательная функция для динамической раскраски статусов
 	const getStatusClass = (status) => {
-		if (status === 'new') return styles.statusNew;
-		if (status === 'in_progress') return styles.statusProgress;
-		if (status === 'done') return styles.statusDone;
+		if (status === 'Новая') return styles.statusNew;
+		if (status === 'В работе') return styles.statusProgress;
+		if (status === 'Выполнена') return styles.statusDone;
 		return '';
 	};
 
@@ -45,14 +44,12 @@ export function ClaimsPage() {
 				<div className={styles.claimsList}>
 					{orders.map((order) => (
 						<div key={order._id} className={styles.claimCard}>
-							{/* HEADER КАРТОЧКИ */}
 							<div className={styles.cardHeader}>
 								<h3 className={styles.productTitle}>
 									{order.productId?.title || 'Удаленное оборудование'}
 								</h3>
 
 								<div className={styles.metaInfo}>
-									{/* Тип услуги (Аренда / Покупка) */}
 									<span
 										className={`${styles.typeBadge} ${
 											order.type === 'Rent'
@@ -63,7 +60,6 @@ export function ClaimsPage() {
 										{order.type === 'Rent' ? '• Аренда' : '• Покупка'}
 									</span>
 
-									{/* Красивый цветной статус */}
 									<span
 										className={`${styles.statusBadge} ${getStatusClass(order.status)}`}
 									>
@@ -72,16 +68,13 @@ export function ClaimsPage() {
 								</div>
 							</div>
 
-							{/* BODY КАРТОЧКИ */}
 							<div className={styles.cardBody}>
-								{/* Техническое описание товара */}
 								{order.productId?.description && (
 									<p className={styles.description}>
 										{order.productId.description}
 									</p>
 								)}
 
-								{/* Твой личный комментарий к заказу */}
 								<div className={styles.commentBlock}>
 									<div className={styles.commentLabel}>
 										Ваш комментарий к заявке:
