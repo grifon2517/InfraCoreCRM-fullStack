@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import api from '../../../api/api';
-import { Loader, ConfirmModal } from '../../../components';
+import { Loader, ConfirmModal, getProductImageUrl } from '../../../components';
 import { ProductFormModal } from '../../../components/ui/product-modal/product-modal';
 import { useModal, useFetch } from '../../../hooks';
 import styles from './admin-product-page.module.css';
@@ -50,7 +50,6 @@ export const AdminProductsPage = () => {
 		deleteModal.open();
 	};
 
-	// Подтверждение удаления товара
 	const confirmProductDelete = async () => {
 		if (!productToDelete) return;
 		try {
@@ -63,14 +62,6 @@ export const AdminProductsPage = () => {
 		} finally {
 			deleteModal.close();
 		}
-	};
-
-	const getProductImageUrl = (image) => {
-		if (!image) return '/placeholder.jpg';
-		if (image.includes('uploads')) {
-			return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
-		}
-		return image;
 	};
 
 	if (loading) return <Loader />;
@@ -102,7 +93,7 @@ export const AdminProductsPage = () => {
 								<tr key={product._id} className={styles.row}>
 									<td>
 										<img
-											src={getProductImageUrl(product.image)} // Чистый вызов вместо трех этажей тернарников
+											src={getProductImageUrl(product.image)}
 											alt={product.title}
 											className={styles.imgPreview}
 										/>

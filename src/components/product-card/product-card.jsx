@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { getProductImageUrl } from '../helper/image';
 import styles from './product-card.module.css';
 
 export function ProductCard({ product }) {
-	const imageUrl = product.image
-		? product.image.includes('uploads')
-			? `http://localhost:5000${product.image.startsWith('/') ? '' : '/'}${product.image}`
-			: product.image
-		: '/placeholder.jpg';
+	const imageUrl = getProductImageUrl(product.image);
 
 	return (
 		<Link to={`/product/${product._id}`} className={styles.card}>

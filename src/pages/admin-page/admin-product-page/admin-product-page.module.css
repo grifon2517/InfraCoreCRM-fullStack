@@ -87,14 +87,13 @@
 	color: #ffffff;
 }
 
-/* МАГИЯ УКРОЩЕНИЯ ДЛИННОГО ТЕКСТА */
 .descWrapper {
-	max-width: 500px; /* Ограничиваем ячейку в ширину */
+	max-width: 500px;
 	display: -webkit-box;
-	-webkit-line-clamp: 2; /* Показываем строго максимум 2 строки текста */
+	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	text-overflow: ellipsis; /* Добавляет красивое ... в конце строки */
+	text-overflow: ellipsis;
 	line-height: 1.5;
 	color: #b9bbbe;
 	font-size: 14px;

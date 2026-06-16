@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/api';
-import { Loader, Button } from '../../components';
+import { Loader, Button, getProductImageUrl } from '../../components';
 import { useFetch } from '../../hooks/useFetch';
+
 import styles from './product-page.module.css';
 
 export function ProductPage() {
@@ -62,14 +63,6 @@ export function ProductPage() {
 		} finally {
 			setOrderLoading(false);
 		}
-	};
-
-	const getProductImageUrl = (image) => {
-		if (!image) return '/placeholder.jpg';
-		if (image.includes('uploads')) {
-			return `http://localhost:5000${image.startsWith('/') ? '' : '/'}${image}`;
-		}
-		return image;
 	};
 
 	if (pageLoading) return <Loader />;

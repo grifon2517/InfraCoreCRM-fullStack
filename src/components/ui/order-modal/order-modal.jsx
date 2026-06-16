@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from '../modal/modal'; // Путь выверен
+import { Modal } from '../modal/modal';
 import styles from './order-modal.module.css';
 
 export const OrderModal = ({ order, onClose, onStatusChange, onDelete }) => {

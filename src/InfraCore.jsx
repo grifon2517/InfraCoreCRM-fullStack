@@ -19,7 +19,7 @@ import {
 } from './pages';
 import './App.css';
 
-function Diplom() {
+function InfraCore() {
 	const dispatch = useDispatch();
 
 	const { loading } = useSelector((state) => state.auth);
@@ -99,4 +99,4 @@ function Diplom() {
 	);
 }
 
-export default Diplom;
+export default InfraCore;
