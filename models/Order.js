@@ -29,7 +29,7 @@ const OrderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["Новая", "В работе", "Выполнена", "Отклонена"],
-      default: "new",
+      default: "Новая",
     },
   },
   { timestamps: true },
