@@ -1,0 +1,140 @@
+.container {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 30px 24px;
+}
+
+.pageTitle {
+	font-size: 28px;
+	font-weight: 600;
+	margin-bottom: 24px;
+	text-align: left;
+	color: #fff;
+}
+
+.claimsList {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.claimCard {
+	background-color: #1a1d24;
+	border: 1px solid #2c313c;
+	border-radius: 12px;
+	padding: 24px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+	transition: border-color 0.2s ease;
+}
+
+.claimCard:hover {
+	border-color: #3b82f6;
+}
+
+.cardHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	border-bottom: 1px solid #2c313c;
+	padding-bottom: 16px;
+	margin-bottom: 16px;
+	gap: 16px;
+}
+
+.productTitle {
+	font-size: 20px;
+	font-weight: 600;
+	color: #ffffff;
+	margin: 0;
+	text-align: left;
+}
+
+.metaInfo {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.typeBadge {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.typeRent {
+	color: #a855f7;
+}
+.typePurchase {
+	color: #10b981;
+}
+
+.statusBadge {
+	display: inline-block;
+	padding: 4px 10px;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.statusNew {
+	background-color: rgba(59, 130, 246, 0.15);
+	color: #3b82f6;
+	border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.statusProgress {
+	background-color: rgba(245, 158, 11, 0.15);
+	color: #f59e0b;
+	border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.statusDone {
+	background-color: rgba(16, 185, 129, 0.15);
+	color: #10b981;
+	border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.cardBody {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	text-align: left;
+}
+
+.description {
+	font-size: 14px;
+	line-height: 1.6;
+	color: #b9bbbe;
+	margin: 0;
+	white-space: pre-line;
+}
+
+.commentBlock {
+	background-color: #1e1e1f;
+	border-left: 3px solid #3b82f6;
+	padding: 14px 16px;
+	border-radius: 0 8px 8px 0;
+}
+
+.commentLabel {
+	font-size: 12px;
+	font-weight: 600;
+	color: #777;
+	text-transform: uppercase;
+	margin-bottom: 6px;
+	letter-spacing: 0.5px;
+}
+
+.commentText {
+	font-size: 14px;
+	color: #e1e3e6;
+	margin: 0;
+	font-style: italic;
+}
+
+.emptyTitle {
+	text-align: center;
+	margin-top: 100px;
+	color: #888;
+}
