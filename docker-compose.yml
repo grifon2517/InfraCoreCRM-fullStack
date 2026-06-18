@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./back
+    container_name: crm_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - crm_uploads:/app/uploads
+
+  frontend:
+    build: ./front
+    container_name: crm_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  crm_uploads:
