@@ -12,6 +12,9 @@ export const OrderModal = ({ order, onClose, onStatusChange, onDelete }) => {
 				<strong>Пользователь:</strong> {order.userId?.login || 'Гость'}
 			</p>
 			<p className={styles.infoLine}>
+				<strong>Email для связи:</strong> {order.contactEmail || 'Не указан'}
+			</p>
+			<p className={styles.infoLine}>
 				<strong>Товар:</strong> {order.productId?.title || 'Удаленный товар'}
 			</p>
 			<p className={styles.infoLine}>
@@ -44,6 +47,7 @@ OrderModal.propTypes = {
 		userId: PropTypes.shape({
 			login: PropTypes.string,
 		}),
+		contactEmail: PropTypes.string,
 		productId: PropTypes.shape({
 			title: PropTypes.string,
 		}),

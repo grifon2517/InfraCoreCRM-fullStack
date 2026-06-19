@@ -53,7 +53,6 @@ export const AdminOrdersPage = () => {
 		open();
 	};
 
-	// Подтверждение удаления заявки в модальном окне
 	const confirmOrderDelete = async () => {
 		if (!orderToDelete) return;
 
@@ -90,6 +89,7 @@ export const AdminOrdersPage = () => {
 						<tr>
 							<th>ID</th>
 							<th>Пользователь</th>
+							<th>Email для связи</th>
 							<th>Товар</th>
 							<th>Тип</th>
 							<th>Статус</th>
@@ -106,6 +106,7 @@ export const AdminOrdersPage = () => {
 							>
 								<td className={styles.idCell}>#{order._id.slice(-6)}</td>
 								<td>{order.userId?.login || 'Гость'}</td>
+								<td>{order.contactEmail}</td>
 								<td className={styles.productCell}>
 									{order.productId?.title || 'Удаленный товар'}
 								</td>
